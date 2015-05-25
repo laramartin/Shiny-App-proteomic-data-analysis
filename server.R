@@ -56,8 +56,7 @@ shinyServer(function(input, output) {
   })
   
   ms <- reactive({
-    temp <- mzf()
-    openMSfile(temp)
+    openMSfile(mzf())
   })
   
   scan <- reactive({
