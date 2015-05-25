@@ -105,17 +105,21 @@ shinyUI(fluidPage(
           p("The minimum and maximum m/z ratios are", 
             verbatimTextOutput("rangeMinMaxMZ"),
             "Choose a m/z ratio range in the slider bar between those values"),
+          
+          
           sliderInput("sliderSpectraMZ", label = h3("Choose M/Z ratio range"), 
-                      min=200, max=2500,
+                      min=200, max=2500,              ### <-------------------- I can't give the value in rangeMinMZ from output
 #                       min = textOutput("rangeMinMZ"), 
 #                       max = textOutput("rangeMaxMZ"), 
-                      value = c(450, 550)),     #### <-----------------------------------x-bar between 0 and 60????          plotOutput('spectraRawData'),
+                      value = c(521, 523)),     
+         
+          # plots shown in 2on choice (Spectra Raw data)
           plotOutput("spectraRawData"),
           plotOutput("spectraRawData3D"),
           plotOutput("spectra2RawData")
           )
       
-          # p(verbatimTextOutput("hd"))       #### <----------------------------------- ????
+          # p(verbatimTextOutput("hd"))       
           
         )
       )

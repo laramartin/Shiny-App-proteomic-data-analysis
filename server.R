@@ -96,12 +96,16 @@ shinyServer(function(input, output) {
     input$sliderSpectraMZ[2]
   })
   
+  resolutionSpectra <- reactive({
+    (maxSpectraMZ() - minSpectraMZ()) * 0.0025
+  })
   
   mapSpectra <- reactive({
     M <- MSmap(ms(), ms1()[rtselSpectra()], 
                lowMz = minSpectraMZ(), 
                highMz= maxSpectraMZ(), 
-               resMz = .005, hd())
+               resMz = resolutionSpectra(), 
+               hd())
   })
   
   
@@ -186,12 +190,13 @@ shinyServer(function(input, output) {
     plot3D(mapSpectra())
   })
   
-  output$spectra2RawData <- renderPlot({
-    ## With some MS2 spectra
-    i <- ms1()[which(rtselSpectra())][1]
-    j <- ms1()[which(rtselSpectra())][2]
-    M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
-    plot3D(M2)
-  })
+#  # plot with MS1 and some MS2 data
+#   output$spectra2RawData <- renderPlot({
+#     ## With some MS2 spectra
+#     i <- ms1()[which(rtselSpectra())][1]
+#     j <- ms1()[which(rtselSpectra())][2]
+#     M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
+#     plot3D(M2)
+#   })
   
 })
