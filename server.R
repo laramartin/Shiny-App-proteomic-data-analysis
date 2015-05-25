@@ -84,8 +84,8 @@ shinyServer(function(input, output) {
   rtselSpectra <- reactive({  
     ## a set of spectra of interest: MS1 spectra eluted
     ## between 30 and 35 minutes retention time
-    rtsel <- hd()$retentionTime[ms1()] / 60 > minSpectraRT() & #"input$sliderSpectra[1]"
-      hd()$retentionTime[ms1()] / 60 < maxSpectraRT() #"input$sliderSpectra[2]"
+    hd()$retentionTime[ms1()] / 60 > minSpectraRT() & 
+      hd()$retentionTime[ms1()] / 60 < maxSpectraRT()
   })
   
   # min and max m/z ratio in Spectra Raw Data analysis (2nd choice in radiobuttons)
