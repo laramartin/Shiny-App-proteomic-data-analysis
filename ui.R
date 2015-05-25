@@ -23,6 +23,9 @@ shinyUI(fluidPage(
       textInput("datasetID", 
                 label = h5("Data set Identifiyer from ProteomeXchange"), 
                 value = ""),
+      
+      # for development purposes, the dataset "PXD000001" is stored locally, 
+      # so I avoid  downloading every time I execute the App 
 #       selectInput("datasetID", label="Choose a dataset:",
 #                   choices="PXD000001"),
 
@@ -92,14 +95,24 @@ shinyUI(fluidPage(
         
         # if user chooses analysis 2 (Spectra Raw Data)               
         conditionalPanel("input.radiobuttons=='2'",
-          p("Spectra Raw Data"),
-          sliderInput("sliderSpectra", label = h2("Choose range"), min = 0, 
-                      max = 100, value = c(30, 35)),     #### <-----------------------------------x-bar between 0 and 60????
+          h2("Spectra Raw Data"),
           
-          plotOutput('spectraRawData'),
+          #slider for Retention Time (RT) x-axis
+          sliderInput("sliderSpectraRT", label = h3("Choose Retention Time range"), min = 0, 
+                      max = 60, value = c(30, 35)),     #### <-----------------------------------x-bar between 0 and 60????
+          
+          #slider for M/Z ratio (m/z) y-axis
+          p("The minimum and maximum m/z ratios are", 
+            verbatimTextOutput("rangeMinMaxMZ"),
+            "Choose a m/z ratio range in the slider bar between those values"),
+          sliderInput("sliderSpectraMZ", label = h3("Choose M/Z ratio range"), 
+                      min=200, max=2500,
+#                       min = textOutput("rangeMinMZ"), 
+#                       max = textOutput("rangeMaxMZ"), 
+                      value = c(450, 550)),     #### <-----------------------------------x-bar between 0 and 60????          plotOutput('spectraRawData'),
+          plotOutput("spectraRawData3D"),
           plotOutput("spectraRawData3D"),
           plotOutput("spectra2RawData")
-            
           )
       
           # p(verbatimTextOutput("hd"))       #### <----------------------------------- ????

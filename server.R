@@ -52,11 +52,12 @@ shinyServer(function(input, output) {
   })
   
   mzf <- reactive({
-    pxget(px, pxfiles(px)[numberFile()])
+    pxget(dataset(), pxfiles(dataset())[numberFile()])
   })
   
   ms <- reactive({
-    openMSfile(mzf())
+    temp <- mzf()
+    openMSfile(temp)
   })
   
   scan <- reactive({
@@ -73,23 +74,35 @@ shinyServer(function(input, output) {
     which(hd()$msLevel == 1)
   })
   
-  # min and max values in Spectra Raw Data analysis (2nd choice in radiobuttons)
-  minSpectra <- reactive({
-    input$sliderSpectra[1]
+  # min and max Retention Time values in Spectra Raw Data analysis (2nd choice in radiobuttons)
+  minSpectraRT <- reactive({
+    input$sliderSpectraRT[1]
   })
-  maxSpectra <- reactive({
-    input$sliderSpectra[2]
+  maxSpectraRT <- reactive({
+    input$sliderSpectraRT[2]
   })
   
   rtselSpectra <- reactive({  
     ## a set of spectra of interest: MS1 spectra eluted
     ## between 30 and 35 minutes retention time
-    rtsel <- hd()$retentionTime[ms1()] / 60 > minSpectra() & #"input$sliderSpectra[1]"
-      hd()$retentionTime[ms1()] / 60 < maxSpectra() #"input$sliderSpectra[2]"
+    rtsel <- hd()$retentionTime[ms1()] / 60 > minSpectraRT() & #"input$sliderSpectra[1]"
+      hd()$retentionTime[ms1()] / 60 < maxSpectraRT() #"input$sliderSpectra[2]"
   })
   
+  # min and max m/z ratio in Spectra Raw Data analysis (2nd choice in radiobuttons)
+  minSpectraMZ <- reactive({
+    input$sliderSpectraMZ[1]
+  })
+  maxSpectraMZ <- reactive({
+    input$sliderSpectraMZ[2]
+  })
+  
+  
   mapSpectra <- reactive({
-    M <- MSmap(ms(), ms1()[rtselSpectra()], 521, 523, .005, hd())
+    M <- MSmap(ms(), ms1()[rtselSpectra()], 
+               lowMz = minSpectraMZ(), 
+               highMz= maxSpectraMZ(), 
+               resMz = .005, hd())
   })
   
   
@@ -138,21 +151,34 @@ shinyServer(function(input, output) {
 #     })
 
   
-  output$rangeMax <- renderText({
-    max(hd()$retentionTime[ms1()])
+#   output$rangeMax <- renderText({
+#     max(hd()$retentionTime[ms1()])
+#   })
+#   
+#   output$rangeMin <- renderText({ #### <-----------------------------------NECESSARY OR ZERO????
+#     min(hd()$retentionTime[ms1()])
+#   })  
+
+#   output$minslider <- renderText({
+#     minSpectra()
+#   })
+  
+  output$rangeMaxMZ <- renderText({
+    max(hd()$highMZ[ms1()])
   })
   
-  output$rangeMin <- renderText({ #### <-----------------------------------NECESSARY OR ZERO????
-    min(hd()$retentionTime[ms1()])
+  output$rangeMinMZ <- renderText({ 
+    min(hd()$lowMZ[ms1()])
   })  
-
-  output$minslider <- renderText({
-    minSpectra()
-  })
+  
+  output$rangeMinMaxMZ <- renderText({ 
+    c(min(hd()$lowMZ[ms1()]), 
+    max(hd()$highMZ[ms1()]))
+  })  
   
   # a set of spectra of interest: MS1 spectra eluted
   output$spectraRawData <- renderPlot({
-    ff <- colorRampPalette(c("red", "steelblue"))
+    ff <- colorRampPalette(c("firebrick1", "navyblue"))
     trellis.par.set(regions=list(col=ff(100)))
     plot(mapSpectra(), aspect = 1, allTicks = FALSE)
   })
