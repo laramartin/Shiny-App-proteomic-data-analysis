@@ -110,7 +110,7 @@ shinyUI(fluidPage(
 #                       min = textOutput("rangeMinMZ"), 
 #                       max = textOutput("rangeMaxMZ"), 
                       value = c(450, 550)),     #### <-----------------------------------x-bar between 0 and 60????          plotOutput('spectraRawData'),
-          plotOutput("spectraRawData3D"),
+          plotOutput("spectraRawData"),
           plotOutput("spectraRawData3D"),
           plotOutput("spectra2RawData")
           )
