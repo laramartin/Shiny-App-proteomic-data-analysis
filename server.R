@@ -1,10 +1,10 @@
-################################
-#   LARA MARTIN - proyecto final de posgrado
-# server.R
-################################
+###################################################
+#   LARA MARTIN - proyecto final de posgrado      #
+#   server.R                                      #
+###################################################
 
 
-# setwd("C:/Users/lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
+setwd("C:/Users/lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
 # library(shiny)
 # runApp("MS-app", display.mode = "showcase")
 
@@ -20,86 +20,125 @@ library(mzR)
 library(MSnbase)
 # library for plotting
 library(lattice)
+#library for MS/MS database search
+library(MSGFplus)
+# library for filterin MS/MS identifications
+library(MSnID)
+
+
+
+
 
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
   
-  ########################    INPUT   ######################  
+  ##########################################################
+  #                 INPUT shinyserver()                    #  
+  ##########################################################
+  
+
   
   # get ID input by user
   dataInput <- reactive({
     input$datasetID
   })
    
+  # get data set
   dataset <- reactive({
 #     PXDataset(input$datasetID)
-    load(file="dataset.save")
+    load(file="MS-app/dataset.save")
     variable
   })
-   
+  
+  # show list files for data set 
   list_files <- reactive({
     pxfiles(dataset())
   })
   
+  # show taxonomic name of organism
   tax_name <- reactive({
     pxtax(dataset())
   })
    
+  # get number file written by user
   numberFile <- reactive({
     input$number_file
   })
   
+  # get raw MS data file
   mzf <- reactive({
     pxget(dataset(), pxfiles(dataset())[numberFile()])
   })
   
+  # read raw MS data file
   ms <- reactive({
     openMSfile(mzf())
   })
   
+  
+  ########################  analysis 1st choice - Scan Peaks  ########################
+  
+  # get scan written by user to plot
   scan <- reactive({
     input$numScan
   })
 
+  # get info of MS data
   hd <- reactive({
     header(ms())
   }) 
     
   
-                        
-  ms1 <- reactive({           #### <-----------------------------------REACTIVE????
+  # which data is MS1 spectra                      
+  ms1 <- reactive({           
     which(hd()$msLevel == 1)
   })
   
-  # min and max Retention Time values in Spectra Raw Data analysis (2nd choice in radiobuttons)
+  
+  ########################  analysis 2nd choice - Spectra Raw Data  ########################
+  
+  
+  # min Retention Time values in Spectra Raw Data analysis
   minSpectraRT <- reactive({
     input$sliderSpectraRT[1]
   })
+
+  # max Retention Time values in Spectra Raw Data analysis  
   maxSpectraRT <- reactive({
     input$sliderSpectraRT[2]
   })
   
+
+  # retention time of MS1 data
   rtselSpectra <- reactive({  
-    ## a set of spectra of interest: MS1 spectra eluted
-    ## between 30 and 35 minutes retention time
+    # MS1 data with retention time chosen 
+    # by user (slider) 
     hd()$retentionTime[ms1()] / 60 > minSpectraRT() & 
       hd()$retentionTime[ms1()] / 60 < maxSpectraRT()
   })
   
-  # min and max m/z ratio in Spectra Raw Data analysis (2nd choice in radiobuttons)
+  
+  # min m/z ratio in Spectra Raw Data analysis 
   minSpectraMZ <- reactive({
     input$sliderSpectraMZ[1]
   })
+  
+  # max m/z ratio in Spectra Raw Data analysis 
   maxSpectraMZ <- reactive({
     input$sliderSpectraMZ[2]
   })
   
+  
+  # change resolution for plot according to m/z ratio range
+  # chosen by user
   resolutionSpectra <- reactive({
     (maxSpectraMZ() - minSpectraMZ()) * 0.0025
   })
   
+  
+  # plot raw data map for scan chosen by user
   mapSpectra <- reactive({
     M <- MSmap(ms(), ms1()[rtselSpectra()], 
                lowMz = minSpectraMZ(), 
@@ -109,7 +148,63 @@ shinyServer(function(input, output) {
   })
   
   
-  ########################  OUTPUT    ########################
+  
+  ########################  analysis 3rd choice - Correction and Filtering  ########################
+  
+  # MS/MS database search (3rd choice)
+  MSMSsearch <- reactive({
+    
+    # get fasta file
+    fas <- pxget(dataset(), pxfiles(dataset())[10])
+    
+    # creates msgfPar object 
+    msgfpar <- msgfPar(database = fas,
+                       instrument = 'HighRes',
+                       tda = TRUE,
+                       enzyme = 'Trypsin',
+                       protocol = 'iTRAQ')
+    # identification file
+    idres <- runMSGF(msgfpar, mzf, memory=1000)
+    
+    # create an MSnID object
+    msnid <- MSnID(".")
+    # read mzIDs from mzid file
+    msnid <- read_mzIDs(msnid,
+                        basename(mzID::files(idres)$id))
+    # return 
+    msnid
+  })
+  
+  
+  
+  # NOT IMPLEMENTED YET
+  
+  correct_filter <- reactive({
+    # correction 
+    MSMSsearch() 
+    msnid_correct <- correct_peak_selection(msnid)
+    msnid_correct$msmsScore <- -log10(msnid_correct$`MS-GF:SpecEValue`)
+    msnid_correct$absParentMassErrorPPM <- abs(mass_measurement_error(msnid_correct))
+    
+    # filter
+    filtObj <- MSnIDFilter(msnid_correct)
+    filtObj$absParentMassErrorPPM <- list(comparison="<", threshold=5.0)
+    filtObj$msmsScore <- list(comparison=">", threshold=8.0)
+    filtObj
+    
+    evaluate_filter(msnid_correct, filtObj)
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  ##########################################################
+  #                 OUTPUT shinyserver()                   #  
+  ##########################################################
   
   
   # ID written by user as output
@@ -135,6 +230,7 @@ shinyServer(function(input, output) {
   output$msFileInfo <- renderPrint({
     ms()
   })
+  
   
   output$radiobuttons <- renderPrint({
     input$radiobuttons 
@@ -198,5 +294,10 @@ shinyServer(function(input, output) {
 #     M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
 #     plot3D(M2)
 #   })
+  
+  
+  output$MSMSsearch_out <- renderText({
+    MSMSsearch()
+  })
   
 })

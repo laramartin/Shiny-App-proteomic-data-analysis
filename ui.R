@@ -1,7 +1,7 @@
-################################
-#   LARA MARTIN - proyecto final de posgrado
-#   ui.R
-################################
+###################################################
+#   LARA MARTIN - proyecto final de posgrado      #
+#   ui.R                                          #
+###################################################
 
 library(shiny)
 
@@ -11,12 +11,14 @@ shinyUI(fluidPage(
   
   titlePanel("Mass Spectrometry Analysis App"),
   p("Note that when downloading a data set, it can take some time to download and show information."),
-
+  
   ############  SIDEBAR PANEL ##########
   
   sidebarLayout(
     sidebarPanel(
       # explain the first step
+     
+      
       h3("Step 1: choose a data set"),
       helpText("Write in the box the PX ID of the data set of interest. 
                You can use for example the PXD000001 data set."),
@@ -35,8 +37,10 @@ shinyUI(fluidPage(
       # show the radio buttons if user writes the number of the file to be analyzed
       conditionalPanel("input.number_file",
         # set of radio buttons to choose type of analysis   
-        radioButtons("radiobuttons", label = h3("Choose type of analysis"),
-               choices = list("Scan Peaks" = 1, "Spectra Raw Data" = 2, "Choice 3" = 3), 
+        radioButtons("radiobuttons", label = h3("Step 2: choose type of analysis"),
+               choices = list("Scan Peaks" = 1, 
+                              "Spectra Raw Data" = 2, 
+                              "Correction and Filtering" = 3), 
                selected = 1)
       )
      
@@ -117,12 +121,18 @@ shinyUI(fluidPage(
           plotOutput("spectraRawData"),
           plotOutput("spectraRawData3D"),
           plotOutput("spectra2RawData")
-          )
-      
-          # p(verbatimTextOutput("hd"))       
-          
+          ), 
+
+
+        # if user chooses analysis 3 (Correction and Filtering)               
+        conditionalPanel("input.radiobuttons=='3'",
+          h2("Correction and Filtering"), 
+          p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
+            raw data against the fasta file of the organism"),
+          verbatimTextOutput("MSMSsearch_out")
+
         )
       )
     
   )
-))
+)))
