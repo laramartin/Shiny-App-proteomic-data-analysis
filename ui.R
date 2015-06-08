@@ -119,8 +119,8 @@ shinyUI(fluidPage(
          
           # plots shown in 2on choice (Spectra Raw data)
           plotOutput("spectraRawData"),
-          plotOutput("spectraRawData3D"),
-          plotOutput("spectra2RawData")
+          plotOutput("spectraRawData3D")
+          # plotOutput("spectra2RawData")
           ), 
 
 

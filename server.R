@@ -4,22 +4,48 @@
 ###################################################
 
 
-setwd("C:/Users/lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
+setwd("C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
 # library(shiny)
 # runApp("MS-app", display.mode = "showcase")
 
-# another data set with a mzML file PXD000790
+
+## install RforProteomics, that contains all the libraries needed
+## it is already installed. I leave this commented to avoid
+## installing it every time I execute the App (it took 60 mins
+## to install everything the first time...)
 
 
-library(shiny)
+
+# Setup
+listPackages <- c("BiocInstaller", "shiny", "lattice")
+
+if(!require("BiocInstaller", quietly = T))  
+  install.packages("BiocInstaller")
+require("BiocInstaller", quietly = T)
+biocLite("RforProteomics", dependencies = TRUE)
+#library RforProteomics (has the libraries needed)
+library(RforProteomics)
+
+# install if needed and load "shiny" lib
+if(!require("shiny", quietly = T))  
+  install.packages("shiny")
+require("shiny", quietly = T)
+
+# install if needed and load "lattice" lib
+if(!require("lattice", quietly = T))  
+  install.packages("lattice")
+require("lattice", quietly = T)
+
+
+
 # library that provides basic access to PX data sets
 library(rpx)
 # library that allows access to different MS file formats
 library(mzR) 
 # library MSnbase 
 library(MSnbase)
-# library for plotting
-library(lattice)
+# # library for plotting
+# library(lattice)
 #library for MS/MS database search
 library(MSGFplus)
 # library for filterin MS/MS identifications
@@ -47,8 +73,8 @@ shinyServer(function(input, output) {
    
   # get data set
   dataset <- reactive({
-#     PXDataset(input$datasetID)
-    load(file="MS-app/dataset.save")
+     PXDataset(input$datasetID)
+    # load(file="MS-app/dataset.save")
     variable
   })
   
@@ -99,7 +125,6 @@ shinyServer(function(input, output) {
   
   ########################  analysis 2nd choice - Spectra Raw Data  ########################
   
-  
   # min Retention Time values in Spectra Raw Data analysis
   minSpectraRT <- reactive({
     input$sliderSpectraRT[1]
@@ -109,16 +134,6 @@ shinyServer(function(input, output) {
   maxSpectraRT <- reactive({
     input$sliderSpectraRT[2]
   })
-  
-
-  # retention time of MS1 data
-  rtselSpectra <- reactive({  
-    # MS1 data with retention time chosen 
-    # by user (slider) 
-    hd()$retentionTime[ms1()] / 60 > minSpectraRT() & 
-      hd()$retentionTime[ms1()] / 60 < maxSpectraRT()
-  })
-  
   
   # min m/z ratio in Spectra Raw Data analysis 
   minSpectraMZ <- reactive({
@@ -130,6 +145,13 @@ shinyServer(function(input, output) {
     input$sliderSpectraMZ[2]
   })
   
+    # retention time of MS1 data
+  rtselSpectra <- reactive({  
+    # MS1 data with retention time chosen 
+    # by user (slider) 
+    hd()$retentionTime[ms1()] / 60 > minSpectraRT() & 
+      hd()$retentionTime[ms1()] / 60 < maxSpectraRT()
+  })
   
   # change resolution for plot according to m/z ratio range
   # chosen by user
@@ -206,7 +228,6 @@ shinyServer(function(input, output) {
   #                 OUTPUT shinyserver()                   #  
   ##########################################################
   
-  
   # ID written by user as output
   output$id <- renderText({
     dataInput()
@@ -236,14 +257,21 @@ shinyServer(function(input, output) {
     input$radiobuttons 
   })
   
+  
+  ########################  analysis 1st choice - Scan Peaks  ########################
+  
+  # plot peaks of raw data
   output$plotPeaks <- renderPlot({
     plot(peaks(ms(), scan()), type = "h")
   })
   
   
-  output$hd <- renderPrint({
-    hd()
-  })
+#   output$hd <- renderPrint({
+#     hd()
+#   })
+
+  ########################  analysis 2nd choice - Spectra Raw Data  ########################
+  
   
 #   output$range <- renderPrint({ 
 #     input$sliderSpectra 
@@ -261,6 +289,7 @@ shinyServer(function(input, output) {
 #   output$minslider <- renderText({
 #     minSpectra()
 #   })
+  
   
   output$rangeMaxMZ <- renderText({
     max(hd()$highMZ[ms1()])
@@ -295,6 +324,7 @@ shinyServer(function(input, output) {
 #     plot3D(M2)
 #   })
   
+  ########################  analysis 3rd choice - Correction and Filtering  ########################
   
   output$MSMSsearch_out <- renderText({
     MSMSsearch()
