@@ -4,37 +4,9 @@
 ###################################################
 
 
-setwd("C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
+# setwd("C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
 # library(shiny)
 # runApp("MS-app", display.mode = "showcase")
-
-
-## install RforProteomics, that contains all the libraries needed
-## it is already installed. I leave this commented to avoid
-## installing it every time I execute the App (it took 60 mins
-## to install everything the first time...)
-
-
-
-# Setup
-listPackages <- c("BiocInstaller", "shiny", "lattice")
-
-if(!require("BiocInstaller", quietly = T))  
-  install.packages("BiocInstaller")
-require("BiocInstaller", quietly = T)
-biocLite("RforProteomics", dependencies = TRUE)
-#library RforProteomics (has the libraries needed)
-library(RforProteomics)
-
-# install if needed and load "shiny" lib
-if(!require("shiny", quietly = T))  
-  install.packages("shiny")
-require("shiny", quietly = T)
-
-# install if needed and load "lattice" lib
-if(!require("lattice", quietly = T))  
-  install.packages("lattice")
-require("lattice", quietly = T)
 
 
 
@@ -45,7 +17,7 @@ library(mzR)
 # library MSnbase 
 library(MSnbase)
 # # library for plotting
-# library(lattice)
+library(lattice)
 #library for MS/MS database search
 library(MSGFplus)
 # library for filterin MS/MS identifications
@@ -73,9 +45,9 @@ shinyServer(function(input, output) {
    
   # get data set
   dataset <- reactive({
-     PXDataset(input$datasetID)
+     PXDataset(dataInput())
     # load(file="MS-app/dataset.save")
-    variable
+    # variable
   })
   
   # show list files for data set 
