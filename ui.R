@@ -150,9 +150,9 @@ shinyUI(fluidPage(
           h4("Upload an identification file"),
           p("If you already have an identification file you would like to use, upload it here:"), 
           
-          
-        
-          # AÑADIR BOTON PARA SUBIR ARCHIVO 
+          #file upload manager for identification file
+          fileInput("ID_file", label = h4("Upload the identification file"), 
+                    multiple = FALSE),
           
           
           h4("Generate an identification file"),
@@ -162,7 +162,9 @@ shinyUI(fluidPage(
           
           h5("Updload the database in fasta format here:"),
           
-          # AÑADIR BOTON PARA SUBIR ARCHIVO 
+          #file upload manager for fasta file
+          fileInput("fasta_file", label = h4("Upload the fasta file"), 
+                    multiple = FALSE),
           
           
           h5("Print the list of files available in the data set and choose the fasta file:"),
