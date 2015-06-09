@@ -151,8 +151,7 @@ shinyUI(fluidPage(
           p("If you already have an identification file you would like to use, upload it here:"), 
           
           #file upload manager for identification file
-          fileInput("ID_file", label = h4("Upload the identification file"), 
-                    multiple = FALSE),
+          fileInput("ID_file", label= "", multiple = FALSE),
           
           
           h4("Generate an identification file"),
@@ -160,14 +159,13 @@ shinyUI(fluidPage(
             If the data set you use distributes the fasta file, you can print the list of files available and choose
             the fasta file to use it"),
           
-          h5("Updload the database in fasta format here:"),
+          h5(strong("-> Updload the database in fasta format here:")),
           
           #file upload manager for fasta file
-          fileInput("fasta_file", label = h4("Upload the fasta file"), 
-                    multiple = FALSE),
+          fileInput("fasta_file", label = "", multiple = FALSE),
           
           
-          h5("Print the list of files available in the data set and choose the fasta file:"),
+          h5(strong("-> Print the list of files available in the data set and choose the fasta file:"))
           
           
           # AÑADIR BOTON PARA imprimir lista files y una caja numérica
@@ -181,7 +179,7 @@ shinyUI(fluidPage(
 #           conditionalPanel("input.numScan",
 #                           plotOutput('plotPeaks')
        )
-)
+  )
     
   )
-)))
+))
