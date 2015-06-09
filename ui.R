@@ -16,6 +16,7 @@ shinyUI(fluidPage(
   
   sidebarLayout(
     sidebarPanel(
+
       # explain the first step
      
       
@@ -40,7 +41,9 @@ shinyUI(fluidPage(
         radioButtons("radiobuttons", label = h3("Step 2: choose type of analysis"),
                choices = list("Scan Peaks" = 1, 
                               "Spectra Raw Data" = 2, 
-                              "Correction and Filtering" = 3), 
+                              "Correction and Filtering" = 3,
+                              "MS/MS database search" = 4), 
+               
                selected = 1)
       )
      
@@ -51,6 +54,8 @@ shinyUI(fluidPage(
     
     mainPanel(
       conditionalPanel("!input.number_file",
+        
+        # this panel will show up only when the user writes an ID                              
         conditionalPanel("input.datasetID",
   
           # title - show data set ID that is going to be analyzed
@@ -74,7 +79,7 @@ shinyUI(fluidPage(
           p(verbatimTextOutput("datasetFiles")),
           br(),
           p("To proceed the analysis, choose a file with one of the 
-            following formats: netCDF, mzXML, mzData or mzML."),
+            following formats: mzXML or mzML."),   ##### mzXML o mzML   <-----------------
           br(),
           
           # choosing the MS file to be analyzed
@@ -132,7 +137,49 @@ shinyUI(fluidPage(
           verbatimTextOutput("MSMSsearch_out")
 
         )
-      )
+      ),
+
+        # if user chooses analysis 4 (MS/MS database search)               
+        conditionalPanel("input.radiobuttons=='4'",
+          h2("MS/MS database search"),
+          p("We can obtain an identification file searching the raw data against 
+            the database of the organism when it is available. To generate the 
+            identification file, you have to upload the database in fasta format."),
+          p("Here you can upload your identification file or generate one."),
+          
+          h4("Upload an identification file"),
+          p("If you already have an identification file you would like to use, upload it here:"), 
+          
+          
+        
+          # AÑADIR BOTON PARA SUBIR ARCHIVO 
+          
+          
+          h4("Generate an identification file"),
+          p("We need the database to parse it with the raw data. You can upload the fasta file if you have it.
+            If the data set you use distributes the fasta file, you can print the list of files available and choose
+            the fasta file to use it"),
+          
+          h5("Updload the database in fasta format here:"),
+          
+          # AÑADIR BOTON PARA SUBIR ARCHIVO 
+          
+          
+          h5("Print the list of files available in the data set and choose the fasta file:"),
+          
+          
+          # AÑADIR BOTON PARA imprimir lista files y una caja numérica
+          
+          
+          
+#           p(verbatimTextOutput("msFileInfo")),
+#           numericInput("numScan", 
+#                       label = "Scan number to plot", 
+#                       value = ""),
+#           conditionalPanel("input.numScan",
+#                           plotOutput('plotPeaks')
+       )
+)
     
   )
 )))
