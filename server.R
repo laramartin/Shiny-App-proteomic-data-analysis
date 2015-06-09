@@ -163,8 +163,8 @@ shinyServer(function(input, output) {
     msnid
   })
   
-  
-  
+  ########################################################################
+  ########################################################################
   # NOT IMPLEMENTED YET
   
   correct_filter <- reactive({
@@ -185,8 +185,18 @@ shinyServer(function(input, output) {
   })
   
   
+  ########################  analysis 4th choice - MS/MS database search  ########################
   
+  # get ID file from user
+  IDfile <- reactive({
+    input$ID_file
+  })
   
+  # get fasta file from user
+  fastafile <- reactive({
+    input$fasta_file
+  })
+
   
   
   
