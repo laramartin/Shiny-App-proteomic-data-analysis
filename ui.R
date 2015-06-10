@@ -89,6 +89,7 @@ shinyUI(fluidPage(
         )
       ),
       
+      ## conditional to begin/show analysis available
       conditionalPanel("input.number_file",
                        
         # if user chooses analysis 1 (scan peaks)               
@@ -134,10 +135,10 @@ shinyUI(fluidPage(
           h2("Correction and Filtering"), 
           p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
             raw data against the fasta file of the organism"),
-          verbatimTextOutput("MSMSsearch_out")
-
-        )
-      ),
+          verbatimTextOutput("MSMSsearch_out"),
+          h4("TO BE IMPLEMENTED")
+        ),
+      
 
         # if user chooses analysis 4 (MS/MS database search)               
         conditionalPanel("input.radiobuttons=='4'",
@@ -168,27 +169,30 @@ shinyUI(fluidPage(
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
-          # AÑADIR BOTON PARA imprimir lista files y una caja numérica
+          # AnADIR BOTON PARA imprimir lista files y una caja numerica
           actionButton("print_files_list", label = "Print files list"), 
           
           p(), 
           p(),
           
-          conditionalPanel("input.print_files_list", 
+          conditionalPanel("input.print_files_list" !=0 , 
             p(verbatimTextOutput("files_out")),
-            numericInput("num_file_choice4", label = "Write the number of the fasta file on the data set")
+            numericInput("num_fastafile_choice4",
+                         label = "Number of the fasta file on the data set"),
+            p(verbatimTextOutput("fastafile"))
             
-                           ) 
-
+            )
           
-#           p(verbatimTextOutput("msFileInfo")),
-#           numericInput("numScan", 
-#                       label = "Scan number to plot", 
-#                       value = ""),
-#           conditionalPanel("input.numScan",
-#                           plotOutput('plotPeaks')
-       )
+          # close conditionalPanel("input.radiobuttons=='4'",
+          )
+
+      # close conditional conditionalPanel("input.number_file"
+      )
+    # close mainPanel()
+    )
+  # close sidebarLayout()
   )
-    
+# close fluidPage
   )
-))
+# close shinyUI
+)

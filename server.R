@@ -193,7 +193,7 @@ shinyServer(function(input, output) {
   })
   
   # get fasta file from user
-  fastafile <- reactive({
+  fastafileinput <- reactive({
     input$fasta_file
   })
 
@@ -202,6 +202,10 @@ shinyServer(function(input, output) {
     list_files()
   })
     
+  fastafile <- reactive({
+    input$num_fastafile_choice4
+    
+  })
   
   ##########################################################
   #                 OUTPUT shinyserver()                   #  
@@ -319,7 +323,9 @@ shinyServer(function(input, output) {
     buttonprintfiles()
   })
 
-  
+  output$fasta_printnum <- renderPrint({
+    fastafile()
+  })
   
   
   
