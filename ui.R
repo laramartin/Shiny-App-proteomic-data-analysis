@@ -149,10 +149,12 @@ shinyUI(fluidPage(
           p("Here you can upload your identification file or generate one."),
           
           h4("Upload an identification file"),
-          p("If you already have an identification file you would like to use, upload it here:"), 
+          p("If you already have an identification file (.mzid file) you would like to use, upload it here:"), 
           
           #file upload manager for identification file
-          fileInput("ID_file", label= "", multiple = FALSE),
+          fileInput("ID_file", label= "", 
+                    accept = ".mzid",
+                    multiple = FALSE),
           
           
           h4("Generate an identification file"),
@@ -163,9 +165,15 @@ shinyUI(fluidPage(
           h5(strong("-> Updload the database in fasta format here:")),
           
           #file upload manager for fasta file
-          fileInput("fasta_file", label = "", multiple = FALSE),
-          
-          
+          fileInput("fasta_file", label = "", 
+                    accept= c(".fasta",
+                              ".fa",
+                              ".mpfa",
+                              ".fna",
+                              ".fsa",
+                              ".fas"),
+                    multiple = FALSE),
+
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
@@ -182,8 +190,9 @@ shinyUI(fluidPage(
             numericInput("num_fastafile_choice4",
                          label = "Number of the fasta file on the data set",
                          value = "")
-#             ,
-#             p(verbatimTextOutput("fasta_printnum"))
+            ,
+            h4("HERE!!!!!!!!"),
+            p(verbatimTextOutput("fasta_printnum"))
             
             )
           

@@ -202,10 +202,21 @@ shinyServer(function(input, output) {
     list_files()
   })
     
-#   fastafile <- reactive({
-#     input$num_fastafile_choice4
-#     
-#   })
+  fastafilenum <- reactive({
+    input$num_fastafile_choice4
+    
+  })
+  
+  fasta_file_path <- reactive(
+    # if user uploads fasta file
+      if(input$fasta_file){
+        fastafileinput()
+      }
+      else if(input$num_fastafile_choice4){
+        fastafilenum()
+      }
+    )
+  
   
   ##########################################################
   #                 OUTPUT shinyserver()                   #  
@@ -322,12 +333,12 @@ shinyServer(function(input, output) {
   output$files_out <- renderPrint({
     buttonprintfiles()
   })
-# 
-#   output$fasta_printnum <- renderPrint({
-#     fastafile()
-#   })
-#   
-#   
+
+  output$fasta_printnum <- renderPrint({
+    fasta_file_path()
+  })
+  
+  
   
   
 ## end of shinyserver() function  
