@@ -170,11 +170,16 @@ shinyUI(fluidPage(
           
           # AÑADIR BOTON PARA imprimir lista files y una caja numérica
           actionButton("print_files_list", label = "Print files list"), 
-          conditionalPanel("input.print_files_list", 
-            p(verbatimTextOutput("datasetFiles"))         
-                           ) 
-            
           
+          p(), 
+          p(),
+          
+          conditionalPanel("input.print_files_list", 
+            p(verbatimTextOutput("files_out")),
+            numericInput("num_file_choice4", label = "Write the number of the fasta file on the data set")
+            
+                           ) 
+
           
 #           p(verbatimTextOutput("msFileInfo")),
 #           numericInput("numScan", 

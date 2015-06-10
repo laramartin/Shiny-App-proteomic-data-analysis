@@ -197,8 +197,11 @@ shinyServer(function(input, output) {
     input$fasta_file
   })
 
-  
-  
+  # user needs to print files list and clicks the button
+  buttonprintfiles <- reactive(if(input$print_files_list != 0) {
+    list_files()
+  })
+    
   
   ##########################################################
   #                 OUTPUT shinyserver()                   #  
@@ -306,4 +309,20 @@ shinyServer(function(input, output) {
     MSMSsearch()
   })
   
+
+
+
+
+########################  analysis  4th choice - MS/MS database search  ########################
+
+  output$files_out <- renderPrint({
+    buttonprintfiles()
+  })
+
+  
+  
+  
+  
+  
+## end of shinyserver() function  
 })
