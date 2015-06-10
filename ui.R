@@ -165,11 +165,15 @@ shinyUI(fluidPage(
           fileInput("fasta_file", label = "", multiple = FALSE),
           
           
-          h5(strong("-> Print the list of files available in the data set and choose the fasta file:"))
+          h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
           # AÑADIR BOTON PARA imprimir lista files y una caja numérica
-          
+          actionButton("print_files_list", label = "Print files list"), 
+          conditionalPanel("input.print_files_list", 
+            p(verbatimTextOutput("datasetFiles"))         
+                           ) 
+            
           
           
 #           p(verbatimTextOutput("msFileInfo")),
