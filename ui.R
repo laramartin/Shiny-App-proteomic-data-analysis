@@ -173,13 +173,17 @@ shinyUI(fluidPage(
           actionButton("print_files_list", label = "Print files list"), 
           
           p(), 
-          p(),
+          p()
+          ,
           
-          conditionalPanel("input.print_files_list" !=0 , 
+          conditionalPanel(
+            condition= "input.print_files_list != '0'", 
             p(verbatimTextOutput("files_out")),
             numericInput("num_fastafile_choice4",
-                         label = "Number of the fasta file on the data set"),
-            p(verbatimTextOutput("fastafile"))
+                         label = "Number of the fasta file on the data set",
+                         value = "")
+#             ,
+#             p(verbatimTextOutput("fasta_printnum"))
             
             )
           
