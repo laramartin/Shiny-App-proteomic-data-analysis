@@ -185,7 +185,8 @@ shinyUI(fluidPage(
                            strong("This process can take more than 2 minutes. If you see this error:", 
                                   code("Error: missing value where TRUE/FALSE needed"), 
                                   "then the files are being parsed. When it's over, you will
-                                  see some information here below."),
+                                  see some information here below. You can follow the Progress
+                                  on the RStudio Console."),
                            
                            verbatimTextOutput("id_info")
                            )
@@ -199,7 +200,7 @@ shinyUI(fluidPage(
         conditionalPanel("input.radiobuttons=='4'",
                          h2("Correction and Filtering"), 
                          p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
-                    raw data against the fasta file of the organism"),
+                          raw data against the fasta file of the organism"),
                          verbatimTextOutput("filtering_msnid_out"),
                          verbatimTextOutput("correct_filter_out")
         # close input.radiobuttons=='4'            

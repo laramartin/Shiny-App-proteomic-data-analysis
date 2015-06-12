@@ -39,8 +39,12 @@ mzIDfromFasta <- function(fasta, rawdata){
   idres
 }
 
-
-
+msnid_from_fasta <- function(mymzID){
+  msnid_object <- MSnID(".")
+  msnid_object <- read_mzIDs(msnid_object,
+                             basename(mzID::files(mymzID)$id))
+  msnid_object
+}
 
 # Define server logic required to run the MS-app
 shinyServer(function(input, output) {
@@ -50,16 +54,16 @@ shinyServer(function(input, output) {
   #                 INPUT shinyserver()                    #  
   ##########################################################
   
-
+  
   
   # get ID input by user
   dataInput <- reactive({
     input$datasetID
   })
-   
+  
   # get data set
   dataset <- reactive({
-     # PXDataset(dataInput())
+    # PXDataset(dataInput())
     load(file="C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/MS-app/dataset.save")
     variable
   })
@@ -73,7 +77,7 @@ shinyServer(function(input, output) {
   tax_name <- reactive({
     pxtax(dataset())
   })
-   
+  
   # get number file written by user
   numberFile <- reactive({
     input$number_file
@@ -97,12 +101,12 @@ shinyServer(function(input, output) {
   scan <- reactive({
     input$numScan
   })
-
+  
   # get info of MS data
   hd <- reactive({
     header(ms())
   }) 
-    
+  
   
   # which data is MS1 spectra                      
   ms1 <- reactive({           
@@ -116,7 +120,7 @@ shinyServer(function(input, output) {
   minSpectraRT <- reactive({
     input$sliderSpectraRT[1]
   })
-
+  
   # max Retention Time values in Spectra Raw Data analysis  
   maxSpectraRT <- reactive({
     input$sliderSpectraRT[2]
@@ -132,7 +136,7 @@ shinyServer(function(input, output) {
     input$sliderSpectraMZ[2]
   })
   
-    # retention time of MS1 data
+  # retention time of MS1 data
   rtselSpectra <- reactive({  
     # MS1 data with retention time chosen 
     # by user (slider) 
@@ -205,10 +209,7 @@ shinyServer(function(input, output) {
   
   #read identification file
   msnid <- reactive({
-    msnid_object <- MSnID(".")
-    id_read <- read_mzIDs(msnid_object,
-                        basename(mzID::files(create_mzID())$id))
-    id_read
+    msnid_from_fasta(create_mzID())
   })
   
   
@@ -232,7 +233,7 @@ shinyServer(function(input, output) {
     filtObj
   })
   
-  evaluate_filter <- reactive({
+  evaluate_msnid <- reactive({
     evaluate_filter(correction_msnid(), filtering_msnid())
   })
   
@@ -245,12 +246,12 @@ shinyServer(function(input, output) {
   # ID written by user as output
   output$id <- renderText({
     dataInput()
-    })
+  })
   
   # print object taxonomic name
   output$datasetInfo <- renderPrint({   
     dataset()
-    })
+  })
   
   output$datasetTax <- renderPrint({   
     tax_name()
@@ -280,29 +281,29 @@ shinyServer(function(input, output) {
   })
   
   
-#   output$hd <- renderPrint({
-#     hd()
-#   })
-
+  #   output$hd <- renderPrint({
+  #     hd()
+  #   })
+  
   ########################  analysis 2nd choice - Spectra Raw Data  ########################
   
   
-#   output$range <- renderPrint({ 
-#     input$sliderSpectra 
-#     })
-
+  #   output$range <- renderPrint({ 
+  #     input$sliderSpectra 
+  #     })
   
-#   output$rangeMax <- renderText({
-#     max(hd()$retentionTime[ms1()])
-#   })
-#   
-#   output$rangeMin <- renderText({ #### <-----------------------------------NECESSARY OR ZERO????
-#     min(hd()$retentionTime[ms1()])
-#   })  
-
-#   output$minslider <- renderText({
-#     minSpectra()
-#   })
+  
+  #   output$rangeMax <- renderText({
+  #     max(hd()$retentionTime[ms1()])
+  #   })
+  #   
+  #   output$rangeMin <- renderText({ #### <-----------------------------------NECESSARY OR ZERO????
+  #     min(hd()$retentionTime[ms1()])
+  #   })  
+  
+  #   output$minslider <- renderText({
+  #     minSpectra()
+  #   })
   
   
   output$rangeMaxMZ <- renderText({
@@ -315,7 +316,7 @@ shinyServer(function(input, output) {
   
   output$rangeMinMaxMZ <- renderText({ 
     c(min(hd()$lowMZ[ms1()]), 
-    max(hd()$highMZ[ms1()]))
+      max(hd()$highMZ[ms1()]))
   })  
   
   # a set of spectra of interest: MS1 spectra eluted
@@ -324,27 +325,27 @@ shinyServer(function(input, output) {
     trellis.par.set(regions=list(col=ff(100)))
     plot(mapSpectra(), aspect = 1, allTicks = FALSE)
   })
-
+  
   output$spectraRawData3D <- renderPlot({
     plot3D(mapSpectra())
   })
   
-#  # plot with MS1 and some MS2 data
-#   output$spectra2RawData <- renderPlot({
-#     ## With some MS2 spectra
-#     i <- ms1()[which(rtselSpectra())][1]
-#     j <- ms1()[which(rtselSpectra())][2]
-#     M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
-#     plot3D(M2)
-#   })
+  #  # plot with MS1 and some MS2 data
+  #   output$spectra2RawData <- renderPlot({
+  #     ## With some MS2 spectra
+  #     i <- ms1()[which(rtselSpectra())][1]
+  #     j <- ms1()[which(rtselSpectra())][2]
+  #     M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
+  #     plot3D(M2)
+  #   })
   
   
   ########################  analysis  3rd choice - MS/MS database search  ########################
-
+  
   output$files_out <- renderPrint({
     buttonprintfiles()
   })
-
+  
   output$fasta_printnum <- renderPrint({
     fasta_file_path()
   })
@@ -352,28 +353,28 @@ shinyServer(function(input, output) {
   output$id_info <- renderPrint({
     show(msnid())
   })
-    
+  
   
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
   output$filtering_msnid_out <- renderPrint({
-    filtering_msnid
+    filtering_msnid()
   })
   
-  output$correct_filter_out <- renderText({
-    evaluate_filter()
+  output$correct_filter_out <- renderPrint({
+    evaluate_msnid()
   })
   
-
-
-
-
-
   
   
   
-## end of shinyserver() function  
+  
+  
+  
+  
+  
+  ## end of shinyserver() function  
 })
 
 
