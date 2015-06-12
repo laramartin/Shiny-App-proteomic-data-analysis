@@ -40,10 +40,9 @@ shinyUI(fluidPage(
         # set of radio buttons to choose type of analysis   
         radioButtons("radiobuttons", label = h3("Step 2: choose type of analysis"),
                choices = list("Scan Peaks" = 1, 
-                              "Spectra Raw Data" = 2, 
-                              "Correction and Filtering" = 3,
-                              "MS/MS database search" = 4), 
-               
+                              "Spectra Raw Data" = 2,
+                              "MS/MS database search" = 3,
+                              "Correction and Filtering" = 4),
                selected = 1)
       )
      
@@ -130,8 +129,8 @@ shinyUI(fluidPage(
           ), 
 
 
-        # if user chooses analysis 3 (Correction and Filtering)               
-        conditionalPanel("input.radiobuttons=='3'",
+        # if user chooses analysis 4 (Correction and Filtering)               
+        conditionalPanel("input.radiobuttons=='4'",
           h2("Correction and Filtering"), 
           p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
             raw data against the fasta file of the organism"),
@@ -140,8 +139,8 @@ shinyUI(fluidPage(
         ),
       
 
-        # if user chooses analysis 4 (MS/MS database search)               
-        conditionalPanel("input.radiobuttons=='4'",
+        # if user chooses analysis 3 (MS/MS database search)               
+        conditionalPanel("input.radiobuttons=='3'",
           h2("MS/MS database search"),
           p("We can obtain an identification file searching the raw data against 
             the database of the organism when it is available. To generate the 

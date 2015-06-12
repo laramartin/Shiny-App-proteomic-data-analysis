@@ -63,9 +63,9 @@ shinyServer(function(input, output) {
    
   # get data set
   dataset <- reactive({
-     PXDataset(dataInput())
-    # load(file="MS-app/dataset.save")
-    # variable
+     # PXDataset(dataInput())
+    load(file="C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/MS-app/dataset.save")
+    variable
   })
   
   # show list files for data set 
