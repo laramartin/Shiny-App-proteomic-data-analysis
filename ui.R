@@ -129,15 +129,8 @@ shinyUI(fluidPage(
           ), 
 
 
-        # if user chooses analysis 4 (Correction and Filtering)               
-        conditionalPanel("input.radiobuttons=='4'",
-          h2("Correction and Filtering"), 
-          p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
-            raw data against the fasta file of the organism"),
-          verbatimTextOutput("MSMSsearch_out"),
-          h4("TO BE IMPLEMENTED")
-        ),
-      
+
+
 
         # if user chooses analysis 3 (MS/MS database search)               
         conditionalPanel("input.radiobuttons=='3'",
@@ -199,8 +192,21 @@ shinyUI(fluidPage(
             # close conditionalPanel "input.print_files_list != '0'"
             )
           
-          # close conditionalPanel("input.radiobuttons=='4'",
-          )
+          # close conditionalPanel("input.radiobuttons=='3'",
+          ),
+        
+        # if user chooses analysis 4 (Correction and Filtering)               
+        conditionalPanel("input.radiobuttons=='4'",
+                         h2("Correction and Filtering"), 
+                         p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
+                    raw data against the fasta file of the organism"),
+                         verbatimTextOutput("correct_filter_out")
+        # close input.radiobuttons=='4'            
+        )
+
+
+
+
 
       # close conditional conditionalPanel("input.number_file"
       )

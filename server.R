@@ -215,15 +215,9 @@ shinyServer(function(input, output) {
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
- 
-
-  
-  
-
   correct_filter <- reactive({
     # correction 
-    MSMSsearch() 
-    msnid_correct <- correct_peak_selection(msnid)
+    msnid_correct <- correct_peak_selection(msnid())
     msnid_correct$msmsScore <- -log10(msnid_correct$`MS-GF:SpecEValue`)
     msnid_correct$absParentMassErrorPPM <- abs(mass_measurement_error(msnid_correct))
     
@@ -358,8 +352,8 @@ shinyServer(function(input, output) {
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
-  output$MSMSsearch_out <- renderText({
-    MSMSsearch()
+  output$correct_filter_out <- renderText({
+    correct_filter()
   })
   
 
