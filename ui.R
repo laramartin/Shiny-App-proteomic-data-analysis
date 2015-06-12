@@ -169,6 +169,20 @@ shinyUI(fluidPage(
                               ".fas"),
                     multiple = FALSE),
           br(), 
+#           conditionalPanel("input.fasta_file", 
+#                            p("Now the raw data is going to be parsed against the fasta file to 
+#                              create an identification file"),
+#                            strong("This process can take more than 2 minutes. If you see this error:", 
+#                                   code("Error: missing value where TRUE/FALSE needed"), 
+#                                   "then the files are being parsed. When it's over, you will
+#                                   see some information here below."),
+#                            
+#                            verbatimTextOutput("mzIDpath")
+#                            ),
+            
+          
+          br(),
+          br(),
           
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
@@ -185,19 +199,18 @@ shinyUI(fluidPage(
             numericInput("num_fastafile_choice4",
                          label = "Number of the fasta file on the data set",
                          value = ""),
-            
-            conditionalPanel("input.num_fastafile_choice4 | input.fasta_file", 
-                             p("Now the raw data is going to be parsed against the fasta file to 
-                               create an identification file"),
-                             strong("This process can take more than 2 minutes. If you see this error:", 
-                                    code("Error: missing value where TRUE/FALSE needed"), 
-                                    "then the files are being parsed. When it's over, you will
-                                    see some information here below."),
-                             
-                             verbatimTextOutput("mzIDpath")
-            
-            
-            ))
+            conditionalPanel("input.num_fastafile_choice4", 
+                           p("Now the raw data is going to be parsed against the fasta file to 
+                             create an identification file"),
+                           strong("This process can take more than 2 minutes. If you see this error:", 
+                                  code("Error: missing value where TRUE/FALSE needed"), 
+                                  "then the files are being parsed. When it's over, you will
+                                  see some information here below."),
+                           
+                           verbatimTextOutput("mzIDpath")
+                           )
+            # close conditionalPanel "input.print_files_list != '0'"
+            )
           
           # close conditionalPanel("input.radiobuttons=='4'",
           )

@@ -188,9 +188,9 @@ shinyServer(function(input, output) {
   # return fasta file path
   fasta_file_path <- reactive(
     # if user uploads fasta file
-    if(is.null(input$fasta_file) != TRUE){
+    if(is.null(input$fasta_file) != TRUE){ # <----- NO FUNCIONA
       # get datapath
-      fasta_path <- fastafileinput()[,4]
+      fasta_path <- input$fasta_file
       fasta_path
     }
     # or if 
