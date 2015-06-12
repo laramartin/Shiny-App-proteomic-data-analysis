@@ -85,7 +85,8 @@ shinyServer(function(input, output) {
   
   # get raw MS data file
   mzf <- reactive({
-    pxget(dataset(), pxfiles(dataset())[numberFile()])
+    mzf_path <- pxget(dataset(), pxfiles(dataset())[numberFile()])
+    mzf_path
   })
   
   # read raw MS data file
@@ -202,11 +203,13 @@ shinyServer(function(input, output) {
   # call the mzIDfromFasta() implemented outside shinyServer() 
   # to generate an identification file with fasta file and raw data
   create_mzID <- reactive({
-    mzid <- mzIDfromFasta(fasta_file_path(), rawdata)
+    mzid <- mzIDfromFasta(fasta_file_path(), mzf())
     mzid
   })
   
-  
+  mzIDpath <- reactive({
+    create_mzID()
+  })
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
 
@@ -335,17 +338,8 @@ shinyServer(function(input, output) {
 #     plot3D(M2)
 #   })
   
-  ########################  analysis 3rd choice - Correction and Filtering  ########################
   
-  output$MSMSsearch_out <- renderText({
-    MSMSsearch()
-  })
-  
-
-
-
-
-########################  analysis  4th choice - MS/MS database search  ########################
+  ########################  analysis  3rd choice - MS/MS database search  ########################
 
   output$files_out <- renderPrint({
     buttonprintfiles()
@@ -355,6 +349,23 @@ shinyServer(function(input, output) {
     fasta_file_path()
   })
   
+  output$mzIDpath <- renderPrint({
+    mzIDpath()
+    })
+    
+  
+  
+  ########################  analysis 4th choice - Correction and Filtering  ########################
+  
+  output$MSMSsearch_out <- renderText({
+    MSMSsearch()
+  })
+  
+
+
+
+
+
   
   
   

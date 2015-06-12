@@ -188,10 +188,16 @@ shinyUI(fluidPage(
             
             conditionalPanel("input.num_fastafile_choice4 | input.fasta_file", 
                              p("Now the raw data is going to be parsed against the fasta file to 
-                               create an identification file")
+                               create an identification file"),
+                             strong("This process can take more than 2 minutes. If you see this error:", 
+                                    code("Error: missing value where TRUE/FALSE needed"), 
+                                    "then the files are being parsed. When it's over, you will
+                                    see some information here below."),
+                             
+                             verbatimTextOutput("mzIDpath")
             
             
-            )
+            ))
           
           # close conditionalPanel("input.radiobuttons=='4'",
           )
