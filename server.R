@@ -18,10 +18,12 @@ library(MSnbase)
 library(lattice)
 #library for MS/MS database search
 library(MSGFplus)
-# library for filterin MS/MS identifications
-library(MSnID)
 # library to generate identification files mzid 
 library(mzID)
+# library for filterin MS/MS identifications
+library(MSnID)
+
+
 
 # function that generates an identification file (choice 3 analysis)
 mzIDfromFasta <- function(fasta, rawdata){
@@ -33,14 +35,8 @@ mzIDfromFasta <- function(fasta, rawdata){
                      protocol = 'iTRAQ')
   # identification file
   idres <- runMSGF(msgfpar, rawdata, memory=1000)
-  
-  # create an MSnID object
-  msnid <- MSnID(".")
-  # read mzIDs from mzid file
-  msnid <- read_mzIDs(msnid,
-                      basename(mzID::files(idres)$id))
-  # return 
-  msnid
+  # identification file generated (.mzid)
+  idres
 }
 
 
@@ -207,18 +203,23 @@ shinyServer(function(input, output) {
     mzid
   })
   
-  mzIDpath <- reactive({
-    create_mzID()
+  #read identification file
+  msnid <- reactive({
+    msnid_object <- MSnID(".")
+    id_read <- read_mzIDs(msnid_object,
+                        basename(mzID::files(idres)$id))
+    id_read
   })
   
+  
+  
   ########################  analysis 4th choice - Correction and Filtering  ########################
-
+  
  
+
   
-  ########################################################################
-  ########################################################################
-  # NOT IMPLEMENTED YET
   
+
   correct_filter <- reactive({
     # correction 
     MSMSsearch() 
@@ -349,9 +350,9 @@ shinyServer(function(input, output) {
     fasta_file_path()
   })
   
-  output$mzIDpath <- renderPrint({
-    mzIDpath()
-    })
+  output$id_info <- renderPrint({
+    show(msnid())
+  })
     
   
   

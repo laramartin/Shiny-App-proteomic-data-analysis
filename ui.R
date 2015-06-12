@@ -168,18 +168,6 @@ shinyUI(fluidPage(
                               ".fas"),
                     multiple = FALSE),
           br(), 
-#           conditionalPanel("input.fasta_file", 
-#                            p("Now the raw data is going to be parsed against the fasta file to 
-#                              create an identification file"),
-#                            strong("This process can take more than 2 minutes. If you see this error:", 
-#                                   code("Error: missing value where TRUE/FALSE needed"), 
-#                                   "then the files are being parsed. When it's over, you will
-#                                   see some information here below."),
-#                            
-#                            verbatimTextOutput("mzIDpath")
-#                            ),
-            
-          
           br(),
           br(),
           
@@ -206,7 +194,7 @@ shinyUI(fluidPage(
                                   "then the files are being parsed. When it's over, you will
                                   see some information here below."),
                            
-                           verbatimTextOutput("mzIDpath")
+                           verbatimTextOutput("id_info")
                            )
             # close conditionalPanel "input.print_files_list != '0'"
             )
