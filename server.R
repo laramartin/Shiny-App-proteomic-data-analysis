@@ -138,21 +138,27 @@ shinyServer(function(input, output) {
   
   
   ########################  analysis 3rd choice - Correction and Filtering  ########################
-  
+
   # MS/MS database search (3rd choice)
   MSMSsearch <- reactive({
     
     # get fasta file
     fas <- pxget(dataset(), pxfiles(dataset())[10])
     
+    mzIDfromFasta(fas, mzf())
+    
+
+  })
+  
+  mzIDfromFasta <- function(fasta, rawdata){
     # creates msgfPar object 
-    msgfpar <- msgfPar(database = fas,
+    msgfpar <- msgfPar(database = fasta,
                        instrument = 'HighRes',
                        tda = TRUE,
                        enzyme = 'Trypsin',
                        protocol = 'iTRAQ')
     # identification file
-    idres <- runMSGF(msgfpar, mzf, memory=1000)
+    idres <- runMSGF(msgfpar, rawdata, memory=1000)
     
     # create an MSnID object
     msnid <- MSnID(".")
@@ -161,7 +167,7 @@ shinyServer(function(input, output) {
                         basename(mzID::files(idres)$id))
     # return 
     msnid
-  })
+  }
   
   ########################################################################
   ########################################################################
