@@ -146,21 +146,16 @@ shinyUI(fluidPage(
           p("We can obtain an identification file searching the raw data against 
             the database of the organism when it is available. To generate the 
             identification file, you have to upload the database in fasta format."),
-          p("Here you can upload your identification file or generate one."),
           
-          h4("Upload an identification file"),
-          p("If you already have an identification file (.mzid file) you would like to use, upload it here:"), 
-          
-          #file upload manager for identification file
-          fileInput("ID_file", label= "", 
-                    accept = ".mzid",
-                    multiple = FALSE),
-          
+          br(),
+          br(),
           
           h4("Generate an identification file"),
+          br(),
           p("We need the database to parse it with the raw data. You can upload the fasta file if you have it.
-            If the data set you use distributes the fasta file, you can print the list of files available and choose
-            the fasta file to use it"),
+            In case the data you are using already distributes the fasta file, click the print button to see 
+            the list of files available. Then write in the box the correspondent number."),
+          br(), 
           
           h5(strong("-> Updload the database in fasta format here:")),
           
@@ -173,26 +168,28 @@ shinyUI(fluidPage(
                               ".fsa",
                               ".fas"),
                     multiple = FALSE),
-
+          br(), 
+          
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
           # AnADIR BOTON PARA imprimir lista files y una caja numerica
           actionButton("print_files_list", label = "Print files list"), 
           
-          p(), 
-          p()
-          ,
+          br(), 
+          br(),
           
           conditionalPanel(
             condition= "input.print_files_list != '0'", 
             p(verbatimTextOutput("files_out")),
             numericInput("num_fastafile_choice4",
                          label = "Number of the fasta file on the data set",
-                         value = "")
-            ,
-            h4("HERE!!!!!!!!"),
-            p(verbatimTextOutput("fasta_printnum"))
+                         value = ""),
+            
+            conditionalPanel("input.num_fastafile_choice4 | input.fasta_file", 
+                             p("Now the raw data is going to be parsed against the fasta file to 
+                               create an identification file")
+            
             
             )
           

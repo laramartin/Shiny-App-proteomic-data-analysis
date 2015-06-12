@@ -20,9 +20,33 @@ library(lattice)
 library(MSGFplus)
 # library for filterin MS/MS identifications
 library(MSnID)
+# library to generate identification files mzid 
+library(mzID)
+
+# function that generates an identification file (choice 3 analysis)
+mzIDfromFasta <- function(fasta, rawdata){
+  # creates msgfPar object 
+  msgfpar <- msgfPar(database = fasta,
+                     instrument = 'HighRes',
+                     tda = TRUE,
+                     enzyme = 'Trypsin',
+                     protocol = 'iTRAQ')
+  # identification file
+  idres <- runMSGF(msgfpar, rawdata, memory=1000)
+  
+  # create an MSnID object
+  msnid <- MSnID(".")
+  # read mzIDs from mzid file
+  msnid <- read_mzIDs(msnid,
+                      basename(mzID::files(idres)$id))
+  # return 
+  msnid
+}
 
 
-# Define server logic required to draw a histogram
+
+
+# Define server logic required to run the MS-app
 shinyServer(function(input, output) {
   
   
@@ -136,38 +160,57 @@ shinyServer(function(input, output) {
   })
   
   
+  ########################  analysis 3rd choice - MS/MS database search  ########################
   
-  ########################  analysis 3rd choice - Correction and Filtering  ########################
-
-  # MS/MS database search (3rd choice)
-  MSMSsearch <- reactive({
-    
-    # get fasta file
-    fas <- pxget(dataset(), pxfiles(dataset())[10])
-    
-    mzIDfromFasta(fas, mzf())
-    
-
+  # get fasta file from user
+  fastafileinput <- reactive({
+    input$fasta_file
   })
   
-  mzIDfromFasta <- function(fasta, rawdata){
-    # creates msgfPar object 
-    msgfpar <- msgfPar(database = fasta,
-                       instrument = 'HighRes',
-                       tda = TRUE,
-                       enzyme = 'Trypsin',
-                       protocol = 'iTRAQ')
-    # identification file
-    idres <- runMSGF(msgfpar, rawdata, memory=1000)
+  # user needs to print files list and clicks the button
+  buttonprintfiles <- reactive(if(input$print_files_list != 0) {
+    list_files()
+  })
+  
+  fastafilenum <- reactive({
+    input$num_fastafile_choice4
     
-    # create an MSnID object
-    msnid <- MSnID(".")
-    # read mzIDs from mzid file
-    msnid <- read_mzIDs(msnid,
-                        basename(mzID::files(idres)$id))
-    # return 
-    msnid
-  }
+  })
+  
+  # download fasta file when user inputs number
+  download_fasta <- reactive({
+    dataset <- PXDataset("PXD000001")
+    pxget(dataset, pxfiles(dataset)[fastafilenum()])
+    
+  })
+  
+  # return fasta file path
+  fasta_file_path <- reactive(
+    # if user uploads fasta file
+    if(is.null(input$fasta_file) != TRUE){
+      # get datapath
+      fasta_path <- fastafileinput()[,4]
+      fasta_path
+    }
+    # or if 
+    else if(input$num_fastafile_choice4 != ""){
+      fasta_path <- download_fasta()
+      fasta_path
+    }
+  )
+  
+  # call the mzIDfromFasta() implemented outside shinyServer() 
+  # to generate an identification file with fasta file and raw data
+  create_mzID <- reactive({
+    mzid <- mzIDfromFasta(fasta_file_path(), rawdata)
+    mzid
+  })
+  
+  
+  
+  ########################  analysis 4th choice - Correction and Filtering  ########################
+
+ 
   
   ########################################################################
   ########################################################################
@@ -190,38 +233,6 @@ shinyServer(function(input, output) {
     
   })
   
-  
-  ########################  analysis 4th choice - MS/MS database search  ########################
-  
-  # get ID file from user
-  IDfile <- reactive({
-    input$ID_file
-  })
-  
-  # get fasta file from user
-  fastafileinput <- reactive({
-    input$fasta_file
-  })
-
-  # user needs to print files list and clicks the button
-  buttonprintfiles <- reactive(if(input$print_files_list != 0) {
-    list_files()
-  })
-    
-  fastafilenum <- reactive({
-    input$num_fastafile_choice4
-    
-  })
-  
-  fasta_file_path <- reactive(
-    # if user uploads fasta file
-      if(input$fasta_file){
-        fastafileinput()
-      }
-      else if(input$num_fastafile_choice4){
-        fastafilenum()
-      }
-    )
   
   
   ##########################################################
