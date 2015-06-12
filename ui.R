@@ -200,6 +200,7 @@ shinyUI(fluidPage(
                          h2("Correction and Filtering"), 
                          p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
                     raw data against the fasta file of the organism"),
+                         verbatimTextOutput("filtering_msnid_out"),
                          verbatimTextOutput("correct_filter_out")
         # close input.radiobuttons=='4'            
         )

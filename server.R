@@ -207,7 +207,7 @@ shinyServer(function(input, output) {
   msnid <- reactive({
     msnid_object <- MSnID(".")
     id_read <- read_mzIDs(msnid_object,
-                        basename(mzID::files(idres)$id))
+                        basename(mzID::files(create_mzID())$id))
     id_read
   })
   
@@ -356,6 +356,10 @@ shinyServer(function(input, output) {
   
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
+  
+  output$filtering_msnid_out <- renderPrint({
+    filtering_msnid
+  })
   
   output$correct_filter_out <- renderText({
     evaluate_filter()
