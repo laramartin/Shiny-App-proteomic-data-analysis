@@ -87,7 +87,30 @@ shinyUI(fluidPage(
                           
                           br(),
                           
-                          p("The first step is introduce the ID "),
+                          
+                          
+                          p("The", strong("first step"), "is to select the experiment data. For that, 
+                            introduce on the sidebar the ID of one data set located in the ", 
+                            a("ProteomeXchange database", 
+                              href = "http://www.proteomexchange.org/"),
+                            "you want to analyse. Notice that for now, it is only possible to analyse the data set with ID", 
+                            strong("PXD000001"), ". Once written the ID, the MS-app will download the data set and
+                            will show some information about the data set in the main panel."),
+                          
+                          p("The", strong("second step"), "is to select the raw data. Raw data can be stored in 
+                            different formats, but this application takes only two formats:", 
+                            strong("mzML"), "and", strong("mzXML"), ". Once entered de data set ID, one of the things that 
+                            you will see printed in the main panel is the list of files available in the data set. Below this 
+                            list, there will be a box where you have to enter which raw data file it is going to be used. 
+                            Doing this automatically "),
+                          
+                          p(""),
+                          
+                          br(),
+                          
+                          
+
+                          
                           
                           br(),
                           br(),
@@ -97,6 +120,8 @@ shinyUI(fluidPage(
                           br(),
                           br(),
                           br(),
+                          
+                          hr(),
                           
                           fluidRow(
                             column(2,
