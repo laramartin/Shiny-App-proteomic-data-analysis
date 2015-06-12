@@ -9,8 +9,25 @@ shinyUI(fluidPage(
   
   ############  TITLE PANEL ##########
   
-  titlePanel("Mass Spectrometry Analysis App"),
-  p("Note that when downloading a data set, it can take some time to download and show information."),
+  fluidRow(
+    column(2,
+           img(src="lara_martin_tiny_logo.png", height="150px")
+    ),
+    column(10,
+           titlePanel("Mass Spectrometry Analysis App"),
+           strong(div("Note that when downloading a data set, it can take some time to download and show information.
+             There is no function available that shows a progress bar while Shiny is busy that can be
+                      used for this app.", 
+                      style = "color:blue"))
+    )
+  ),
+           
+
+  
+  # img(src="lara_martin_tiny_logo.png", titlePanel("Mass Spectrometry Analysis App")),
+  # titlePanel("Mass Spectrometry Analysis App"),
+  br(),
+  br(),
   
   ############  SIDEBAR PANEL ##########
   
@@ -19,6 +36,8 @@ shinyUI(fluidPage(
 
       # explain the first step
      
+      p("The MS-app implements part of the Bioconductor proteomics workflow"),
+      
       
       h3("Step 1: choose a data set"),
       helpText("Write in the box the PX ID of the data set of interest. 
@@ -52,7 +71,51 @@ shinyUI(fluidPage(
     ############  MAIN PANEL ##########
     
     mainPanel(
+      
+      ## user writes ID  - information will be printed
       conditionalPanel("!input.number_file",
+        
+                                        
+         # this panel will show up only when the user writes an ID                              
+         conditionalPanel("!input.datasetID",
+                          
+                          # intro explaining what does this app
+                          p("The MS-app allows to analyze proteomic data obtained
+                            by Mass Spectrometry. The protocol implemented is inspired by the ",
+                            a("Bioconductor proteomics workflow.", 
+                              href = "http://www.bioconductor.org/help/workflows/proteomics/")),
+                          
+                          br(),
+                          
+                          p("The first step is introduce the ID "),
+                          
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          br(),
+                          
+                          fluidRow(
+                            column(2,
+                                   img(src="alarm.gif", height="100px")
+                            ),
+                            column(10,
+                                   div(
+                                     p("DISCLAIMER"), 
+                                     br(),
+                                     p("This application is not complete. The author, Lara Martin, does not
+                                       have programmer experience and had a limited time to develop this.
+                                       Some of the functionality may not be completed or correct. Please
+                                       refer to documentation for reference."),
+                                     style = "color:red")
+                            )
+                          )
+         ),                  
+                       
+                       
         
         # this panel will show up only when the user writes an ID                              
         conditionalPanel("input.datasetID",
