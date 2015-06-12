@@ -102,10 +102,19 @@ shinyUI(fluidPage(
                             strong("mzML"), "and", strong("mzXML"), ". Once entered de data set ID, one of the things that 
                             you will see printed in the main panel is the list of files available in the data set. Below this 
                             list, there will be a box where you have to enter which raw data file it is going to be used. 
-                            Doing this automatically "),
+                            Doing this automatically translates to download the file "),
                           
-                          p(""),
+                          p("The", strong("third step"), "........"),
                           
+                          
+                          ### EXPLICAR BREVEMENTE QUE ES CADA UNO  <<<<<<------------------
+                          tags$ol(
+                            tags$li(strong("Scan Peaks")), 
+                            tags$li(strong("Spectra Raw Data")), 
+                            tags$li(strong("MS/MS database search")),
+                            tags$li(strong("Correction and Filtering"))
+                            ),
+
                           br(),
                           
                           
