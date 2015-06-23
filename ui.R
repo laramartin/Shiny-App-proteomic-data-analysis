@@ -98,20 +98,23 @@ shinyUI(fluidPage(
                             will show some information about the data set in the main panel."),
                           
                           p("The", strong("second step"), "is to select the raw data. Raw data can be stored in 
-                            different formats, but this application takes only two formats:", 
-                            strong("mzML"), "and", strong("mzXML"), ". Once entered de data set ID, one of the things that 
+                            different formats, but this application takes only two:", 
+                            strong("mzML"), "and", strong("mzXML"), ". Once entered the data set ID, one of the things that 
                             you will see printed in the main panel is the list of files available in the data set. Below this 
                             list, there will be a box where you have to enter which raw data file it is going to be used. 
                             Doing this automatically translates to download the file "),
                           
-                          p("The", strong("third step"), "........"),
+                          p("The", strong("third step"), "is to select a type of analysis. The analysis implemented are:"),
                           
                           
                           ### EXPLICAR BREVEMENTE QUE ES CADA UNO  <<<<<<------------------
                           tags$ol(
-                            tags$li(strong("Scan Peaks")), 
-                            tags$li(strong("Spectra Raw Data")), 
-                            tags$li(strong("MS/MS database search")),
+                            tags$li(strong("Scan Peaks"), ": the number of scans will be printed, allowing you to choose
+                                    a number of scan to see its plot."), 
+                            tags$li(strong("Spectra Raw Data"), ": generates two plots. The first one is a heat map
+                                    of the MS1 Spectra by m/z ratio and retention time chosen. The second plot is a
+                                    3D of the first plot, adding the intensity as third axis."), 
+                            tags$li(strong("MS/MS database search"), ":"),
                             tags$li(strong("Correction and Filtering"))
                             ),
 
@@ -126,9 +129,7 @@ shinyUI(fluidPage(
                           br(),
                           br(),
                           br(),
-                          br(),
-                          br(),
-                          br(),
+
                           
                           hr(),
                           
