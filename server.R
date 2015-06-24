@@ -237,6 +237,16 @@ shinyServer(function(input, output) {
     evaluate_filter(correction_msnid(), filtering_msnid())
   })
   
+  #################  analysis 5th choice - Spectra Raw Data with identification  ###############
+  
+  msexp <- reactive({
+    readMSData(mzf(), verbose = FALSE)
+  })
+  
+  msexpIdent <- reactive({ 
+    addIdentificationData(msexp(), mzIDfromFasta())
+  })
+  
   
   
   ##########################################################
@@ -367,10 +377,12 @@ shinyServer(function(input, output) {
   })
   
   
+  #################  analysis 5th choice - Spectra Raw Data with Identification  #################
   
-  
-  
-  
+  output$msexpIdentPlot <- renderPrint({
+    plot(msexpIdent[[1]], full=TRUE)
+  })
+
   
   
   
