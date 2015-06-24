@@ -299,8 +299,17 @@ shinyUI(fluidPage(
                          h2("Correction and Filtering"), 
                          p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
                           raw data against the fasta file of the organism"),
+                         p("Returns a matrix with with column names", em(fdr), "and", em(n), "Column", em(n),
+                          "contains the number of features (spectra, peptides or proteins/accessions) passing 
+                          the filter. Column", em(fdr), "is the false discovery rate (i.e. identification confidence) for 
+                          the corresponding features"),                         
                          verbatimTextOutput("filtering_msnid_out"),
-                         verbatimTextOutput("correct_filter_out")
+                         verbatimTextOutput("correct_filter_out"),
+                         sliderInput("correction_ErrorPPM", label = h3("absParentMassErrorPPM"), min = 0, 
+                                     max = 100, value = 10),
+                         sliderInput("correction_msmsScore", label = h3("msmsScore"), min = 0, 
+                                     max = 100, value = 5)
+                         
         # close input.radiobuttons=='4'            
         )
 
