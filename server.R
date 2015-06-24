@@ -383,17 +383,18 @@ shinyServer(function(input, output) {
   
   #################  analysis 5th choice - Spectra Raw Data with Identification  #################
   
-  output$msexpIdentPlot <- renderPrint({
-    plot(msexpIdent()[1:3], full=TRUE)
+  output$msexpIdentPlot <- renderPlot({
+    plot(msexpIdent()[c(input$msexpIdentPlot_num1, 
+                        input$msexpIdentPlot_num2,
+                        input$msexpIdentPlot_num3)], 
+         full=TRUE)
   })
 
   output$msexp_length <- renderText(
     length(msexp())
   )
   
-  output$msexpIdentInfo <- renderText(
-    msexpIdent()
-  )
+
 
   
   

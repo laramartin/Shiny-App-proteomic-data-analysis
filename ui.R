@@ -62,7 +62,8 @@ shinyUI(fluidPage(
                               "Spectra Raw Data" = 2,
                               "MS/MS database search" = 3,
                               "Correction and Filtering" = 4,
-                              "Spectra Raw Data with identifications" = 5),
+                              "Spectra Raw Data with identifications" = 5,
+                              "Quantification" = 6),
                selected = 1)
       )
      
@@ -318,11 +319,31 @@ shinyUI(fluidPage(
                          h2("Spectra Raw Data with Identification"),
                          plotOutput('msexpIdentPlot'),
                          verbatimTextOutput("msexp_length"),
-                         verbatimTextOutput("msexpIdentInfo")
-                         
+                         numericInput("msexpIdentPlot_num1", 
+                                      label = "1st Number of scan", 
+                                      value = "1"),
+                         numericInput("msexpIdentPlot_num2", 
+                                      label = "2nd Number of scan", 
+                                      value = "2"),
+                         numericInput("msexpIdentPlot_num3", 
+                                      label = "3rd Number of scan", 
+                                      value = "3")
 
                        # close input.radiobuttons=='5'            
-                       )
+                       ),
+
+        
+        conditionalPanel("input.radiobuttons=='6'",
+                         h2("Quantification"),
+                         p("In this section I wanted to give to the user the oportunity of 
+                           doing a quantification analysis. The problem is that the code
+                           shown in the protocol wasn't working properly and I couldn't
+                           figure it out. For that reason, I use the same code as the
+                           protocol and show the following error:", 
+                           code("Error in registered()[[bpparamClass]]"))
+                         
+                         # close input.radiobuttons=='6'
+                         )
 
 
 
