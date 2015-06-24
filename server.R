@@ -406,7 +406,7 @@ shinyServer(function(input, output) {
   #################  analysis 6th choice - Quantification  #################
   
   output$msset_error <- renderPrint(
-    msset()
+    exprs(msset())
   )
 
   
