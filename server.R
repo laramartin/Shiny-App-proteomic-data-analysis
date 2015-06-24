@@ -238,13 +238,17 @@ shinyServer(function(input, output) {
   })
   
   #################  analysis 5th choice - Spectra Raw Data with identification  ###############
+  id_file_path <- reactive({
+    basename(mzID::files(create_mzID())$id)
+  })
+  
   
   msexp <- reactive({
     readMSData(mzf(), verbose = FALSE)
   })
   
   msexpIdent <- reactive({ 
-    addIdentificationData(msexp(), mzIDfromFasta())
+    addIdentificationData(msexp(), id_file_path())
   })
   
   
@@ -380,10 +384,17 @@ shinyServer(function(input, output) {
   #################  analysis 5th choice - Spectra Raw Data with Identification  #################
   
   output$msexpIdentPlot <- renderPrint({
-    plot(msexpIdent[[1]], full=TRUE)
+    plot(msexpIdent()[1:3], full=TRUE)
   })
 
+  output$msexp_length <- renderText(
+    length(msexp())
+  )
   
+  output$msexpIdentInfo <- renderText(
+    msexpIdent()
+  )
+
   
   
   ## end of shinyserver() function  

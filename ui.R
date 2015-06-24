@@ -316,7 +316,9 @@ shinyUI(fluidPage(
 
         conditionalPanel("input.radiobuttons=='5'",
                          h2("Spectra Raw Data with Identification"),
-                         plotOutput('msexpIdentPlot')
+                         plotOutput('msexpIdentPlot'),
+                         verbatimTextOutput("msexp_length"),
+                         verbatimTextOutput("msexpIdentInfo")
                          
 
                        # close input.radiobuttons=='5'            
