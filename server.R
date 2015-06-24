@@ -228,8 +228,8 @@ shinyServer(function(input, output) {
   filtering_msnid <- reactive({
     # filter
     filtObj <- MSnIDFilter(correction_msnid())
-    filtObj$absParentMassErrorPPM <- list(comparison="<", threshold=5.0)
-    filtObj$msmsScore <- list(comparison=">", threshold=8.0)
+    filtObj$absParentMassErrorPPM <- list(comparison="<", threshold=input$correction_ErrorPPM)
+    filtObj$msmsScore <- list(comparison=">", threshold=input$correction_msmsScore)
     filtObj
   })
   
