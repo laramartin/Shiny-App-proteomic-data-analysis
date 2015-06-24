@@ -252,6 +252,14 @@ shinyServer(function(input, output) {
   })
   
   
+  #################  analysis 6th choice - Quantitification  ###############
+  
+  msset <- reactive(
+    quantify(msexpIdent(), 
+             method = "trap", 
+             reporters = iTRAQ4, 
+             verbose=FALSE)
+  )
   
   ##########################################################
   #                 OUTPUT shinyserver()                   #  
@@ -394,7 +402,12 @@ shinyServer(function(input, output) {
     length(msexp())
   )
   
-
+  
+  #################  analysis 6th choice - Quantification  #################
+  
+  output$msset_error <- renderPrint(
+    msset()
+  )
 
   
   

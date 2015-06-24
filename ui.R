@@ -340,7 +340,8 @@ shinyUI(fluidPage(
                            shown in the protocol wasn't working properly and I couldn't
                            figure it out. For that reason, I use the same code as the
                            protocol and show the following error:", 
-                           code("Error in registered()[[bpparamClass]]"))
+                           code("Error in registered()[[bpparamClass]]")),
+                         verbatimTextOutput("msset_error")
                          
                          # close input.radiobuttons=='6'
                          )
