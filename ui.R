@@ -193,7 +193,10 @@ shinyUI(fluidPage(
                        
         # if user chooses analysis 1 (scan peaks)               
         conditionalPanel("input.radiobuttons=='1'",
+          p("Here below will be printed the numbers of scans in the raw data"),
           p(verbatimTextOutput("msFileInfo")),
+          p("Choose and write in the box the scan number you desire to plot and 
+            it will be generated below."),
           numericInput("numScan", 
                        label = "Scan number to plot", 
                        value = ""),
@@ -205,21 +208,19 @@ shinyUI(fluidPage(
         # if user chooses analysis 2 (Spectra Raw Data)               
         conditionalPanel("input.radiobuttons=='2'",
           h2("Spectra Raw Data"),
+          p("Here you can plot a specific slice of raw data to examine by retention time (RT) and M/Z ratio"),
           
           #slider for Retention Time (RT) x-axis
-          sliderInput("sliderSpectraRT", label = h3("Choose Retention Time range"), min = 0, 
-                      max = 60, value = c(30, 35)),     #### <-----------------------------------x-bar between 0 and 60????
+          sliderInput("sliderSpectraRT", label = h5("Choose Retention Time range"), min = 0, 
+                      max = 60, value = c(30, 35)),     
           
           #slider for M/Z ratio (m/z) y-axis
-          p("The minimum and maximum m/z ratios are", 
-            verbatimTextOutput("rangeMinMaxMZ"),
-            "Choose a m/z ratio range in the slider bar between those values"),
-          
-          
-          sliderInput("sliderSpectraMZ", label = h3("Choose M/Z ratio range"), 
-                      min=200, max=2500,              ### <-------------------- I can't give the value in rangeMinMZ from output
-#                       min = textOutput("rangeMinMZ"), 
-#                       max = textOutput("rangeMaxMZ"), 
+          p("Please, notice what the minimum and maximum m/z ratios for the raw data are and choose
+            a range between those numbers:"), 
+          # print range M/Z ratio for raw data
+          verbatimTextOutput("rangeMinMaxMZ"),
+          sliderInput("sliderSpectraMZ", label = h5("Choose M/Z ratio range"), 
+                      min=200, max=2500,              
                       value = c(521, 523)),     
          
           # plots shown in 2on choice (Spectra Raw data)
