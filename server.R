@@ -254,10 +254,27 @@ shinyServer(function(input, output) {
   
   #################  analysis 6th choice - Quantitification  ###############
   
+  # get method selected by user
+  method_num <- reactive(input$quantif_method)
+  
+  # get method selected by user
+  reporter_num <- reactive(input$quantif_reporter)
+  
+  # 
+  select_method <- reactive({
+    method_list <- c("trap", "max", "sum")
+    method_list[as.numeric(method_num())]
+  })
+  
+  select_reporter <- reactive({
+    reporter_list <- c("iTRAQ4", "iTRAQ5", "TMT6", "TMT7")
+    reporter_list[as.numeric(reporter_num())]
+  })
+  
   msset <- reactive(
     quantify(msexpIdent(), 
-             method = "trap", 
-             reporters = iTRAQ4, 
+             method = select_method(), 
+             reporters = select_reporter(), 
              verbose=FALSE)
   )
   
@@ -405,8 +422,10 @@ shinyServer(function(input, output) {
   
   #################  analysis 6th choice - Quantification  #################
   
-  output$msset_error <- renderPrint(
-    exprs(msset())
+  output$msset_out <- renderPrint(
+    if(input$quantif_button){
+      exprs(msset())
+    }
   )
 
   

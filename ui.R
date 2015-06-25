@@ -319,6 +319,7 @@ shinyUI(fluidPage(
                          h2("Spectra Raw Data with Identification"),
                          plotOutput('msexpIdentPlot'),
                          verbatimTextOutput("msexp_length"),
+                         p("explain what is and use different numbers"),
                          numericInput("msexpIdentPlot_num1", 
                                       label = "1st Number of scan", 
                                       value = "1"),
@@ -335,13 +336,20 @@ shinyUI(fluidPage(
         
         conditionalPanel("input.radiobuttons=='6'",
                          h2("Quantification"),
-                         p("In this section I wanted to give to the user the oportunity of 
-                           doing a quantification analysis. The problem is that the code
-                           shown in the protocol wasn't working properly and I couldn't
-                           figure it out. For that reason, I use the same code as the
-                           protocol and show the following error:", 
-                           code("Error in registered()[[bpparamClass]]")),
-                         verbatimTextOutput("msset_error")
+                         p("...explain..."),
+                         selectInput("quantif_method", label = h2("Select Peak Quantitation Method"), 
+                                      choices = list("trapezoidation" = 1, 
+                                                     "maximum" = 2, "sum" = 3), 
+                                      selected = 1),
+                         selectInput("quantif_reporter", label = h2("Select Reporter Ion"), 
+                                    choices = list("iTRAQ4" = 1, "iTRAQ5" = 2, 
+                                                   "TMT6" = 3, "TMT7" = 4), 
+                                    selected = 1),
+                         
+                         actionButton("quantif_button", label = "Calculate"),
+                         verbatimTextOutput("calculateIfButton"),
+                         
+                         verbatimTextOutput("msset_out")
                          
                          # close input.radiobuttons=='6'
                          )
