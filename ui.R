@@ -211,7 +211,7 @@ shinyUI(fluidPage(
           p("Here you can plot a specific slice of raw data to examine by retention time (RT) and M/Z ratio"),
           
           #slider for Retention Time (RT) x-axis
-          sliderInput("sliderSpectraRT", label = h5("Choose Retention Time range"), min = 0, 
+          sliderInput("sliderSpectraRT", label = strong("Choose Retention Time range"), min = 0, 
                       max = 60, value = c(30, 35)),     
           
           #slider for M/Z ratio (m/z) y-axis
@@ -219,7 +219,7 @@ shinyUI(fluidPage(
             a range between those numbers:"), 
           # print range M/Z ratio for raw data
           verbatimTextOutput("rangeMinMaxMZ"),
-          sliderInput("sliderSpectraMZ", label = h5("Choose M/Z ratio range"), 
+          sliderInput("sliderSpectraMZ", label = strong("Choose M/Z ratio range"), 
                       min=200, max=2500,              
                       value = c(521, 523)),     
          
@@ -236,21 +236,20 @@ shinyUI(fluidPage(
         # if user chooses analysis 3 (MS/MS database search)               
         conditionalPanel("input.radiobuttons=='3'",
           h2("MS/MS database search"),
-          p("We can obtain an identification file searching the raw data against 
-            the database of the organism when it is available. To generate the 
-            identification file, you have to upload the database in fasta format."),
-          
+          p("We can search for MS/MS identifications in the raw data. For that we use the MSGF+ engine, parsing the
+             raw data against the fasta file of the organism, creating an identification file with mzID format."),
+
           br(),
-          br(),
-          
+
           h4("Generate an identification file"),
-          br(),
+          
           p("We need the database to parse it with the raw data. You can upload the fasta file if you have it.
-            In case the data you are using already distributes the fasta file, click the print button to see 
-            the list of files available. Then write in the box the correspondent number."),
+            In case the data set you are using already distributes the fasta file, click the print button to see 
+            the list of files available. Then write in the box below the correspondent number."),
           br(), 
           
-          h5(strong("-> Updload the database in fasta format here:")),
+          h5(strong("-> Upload the database in fasta format here:"),
+             div(p("Sorry, the uploading doesn't work"), style = "color:red")),
           
           #file upload manager for fasta file
           fileInput("fasta_file", label = "", 
@@ -261,10 +260,7 @@ shinyUI(fluidPage(
                               ".fsa",
                               ".fas"),
                     multiple = FALSE),
-          br(), 
-          br(),
-          br(),
-          
+
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
@@ -282,7 +278,12 @@ shinyUI(fluidPage(
                          value = ""),
             conditionalPanel("input.num_fastafile_choice4", 
                            p("Now the raw data is going to be parsed against the fasta file to 
-                             create an identification file"),
+                             create an identification file. The search for default uses:"),
+                           code("instrument = 'HighRes'"), code("enzyme = 'Trypsin'"), code("protocol = 'iTRAQ'"),
+                           p("Another options are not implemented in this version."),
+                           
+                           br(),
+                           
                            strong("This process can take more than 2 minutes. If you see this error:", 
                                   code("Error: missing value where TRUE/FALSE needed"), 
                                   "then the files are being parsed. When it's over, you will
@@ -300,8 +301,7 @@ shinyUI(fluidPage(
         # if user chooses analysis 4 (Correction and Filtering)               
         conditionalPanel("input.radiobuttons=='4'",
                          h2("Correction and Filtering"), 
-                         p("First, We need to perform a MS/MS database search. For that we use the MSGF+ engine, parsing the
-                          raw data against the fasta file of the organism"),
+                         p("First, We need to perform a MS/MS database search. "),
                          p("Returns a matrix with with column names", em("fdr"), "and", em("n"), "Column", em("n"),
                           "contains the number of features (spectra, peptides or proteins/accessions) passing 
                           the filter. Column", em("fdr"), "is the false discovery rate (i.e. identification confidence) for 
