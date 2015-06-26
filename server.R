@@ -3,18 +3,13 @@
 #   server.R                                      #
 ###################################################
 
-
-# setwd("C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/")
-# library(shiny)
-# runApp("MS-app", display.mode = "showcase")
-
 # library that provides basic access to PX data sets
 library(rpx)
 # library that allows access to different MS file formats
 library(mzR) 
 # library MSnbase 
 library(MSnbase)
-# # library for plotting
+# library for plotting
 library(lattice)
 #library for MS/MS database search
 library(MSGFplus)
@@ -22,7 +17,6 @@ library(MSGFplus)
 library(mzID)
 # library for filterin MS/MS identifications
 library(MSnID)
-
 
 
 # function that generates an identification file (choice 3 analysis)
@@ -54,8 +48,7 @@ shinyServer(function(input, output) {
   #                 INPUT shinyserver()                    #  
   ##########################################################
   
-  
-  
+
   # get ID input by user
   dataInput <- reactive({
     input$datasetID
@@ -64,6 +57,11 @@ shinyServer(function(input, output) {
   # get data set
   dataset <- reactive({
     # PXDataset(dataInput())
+    
+    # for development purposes, the dataset "PXD000001" is stored locally, 
+    # so I avoid  downloading every time I execute the App 
+    #       selectInput("datasetID", label="Choose a dataset:",
+    #                   choices="PXD000001"),
     load(file="C:/Users/Lara/Dropbox/MASTER/4o_semestre/proyecto/PEC2_borrador/MS-app/dataset.save")
     variable
   })
@@ -306,11 +304,11 @@ shinyServer(function(input, output) {
     ms()
   })
   
-  
+  # get which analysis has been chosen
   output$radiobuttons <- renderPrint({
     input$radiobuttons 
   })
-  
+
   
   ########################  analysis 1st choice - Scan Peaks  ########################
   
@@ -318,41 +316,9 @@ shinyServer(function(input, output) {
   output$plotPeaks <- renderPlot({
     plot(peaks(ms(), scan()), type = "h")
   })
-  
-  
-  #   output$hd <- renderPrint({
-  #     hd()
-  #   })
-  
+
   ########################  analysis 2nd choice - Spectra Raw Data  ########################
-  
-  
-  #   output$range <- renderPrint({ 
-  #     input$sliderSpectra 
-  #     })
-  
-  
-  #   output$rangeMax <- renderText({
-  #     max(hd()$retentionTime[ms1()])
-  #   })
-  #   
-  #   output$rangeMin <- renderText({ #### <-----------------------------------NECESSARY OR ZERO????
-  #     min(hd()$retentionTime[ms1()])
-  #   })  
-  
-  #   output$minslider <- renderText({
-  #     minSpectra()
-  #   })
-  
-  
-  output$rangeMaxMZ <- renderText({
-    max(hd()$highMZ[ms1()])
-  })
-  
-  output$rangeMinMZ <- renderText({ 
-    min(hd()$lowMZ[ms1()])
-  })  
-  
+
   output$rangeMinMaxMZ <- renderText({ 
     c(min(hd()$lowMZ[ms1()]), 
       max(hd()$highMZ[ms1()]))
@@ -368,15 +334,6 @@ shinyServer(function(input, output) {
   output$spectraRawData3D <- renderPlot({
     plot3D(mapSpectra())
   })
-  
-  #  # plot with MS1 and some MS2 data
-  #   output$spectra2RawData <- renderPlot({
-  #     ## With some MS2 spectra
-  #     i <- ms1()[which(rtselSpectra())][1]
-  #     j <- ms1()[which(rtselSpectra())][2]
-  #     M2 <- MSmap(ms(), i:j, 100, 1000, 1, hd())
-  #     plot3D(M2)
-  #   })
   
   
   ########################  analysis  3rd choice - MS/MS database search  ########################

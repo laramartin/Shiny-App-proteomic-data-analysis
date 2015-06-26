@@ -8,7 +8,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   ############  TITLE PANEL ##########
-  
+      
   fluidRow(
     column(2,
            img(src="lara_martin_tiny_logo.png", height="150px")
@@ -22,10 +22,6 @@ shinyUI(fluidPage(
     )
   ),
            
-
-  
-  # img(src="lara_martin_tiny_logo.png", titlePanel("Mass Spectrometry Analysis App")),
-  # titlePanel("Mass Spectrometry Analysis App"),
   br(),
   br(),
   
@@ -46,11 +42,6 @@ shinyUI(fluidPage(
                 label = h5("Data set Identifiyer from ProteomeXchange"), 
                 value = ""),
       
-      # for development purposes, the dataset "PXD000001" is stored locally, 
-      # so I avoid  downloading every time I execute the App 
-#       selectInput("datasetID", label="Choose a dataset:",
-#                   choices="PXD000001"),
-
       br(),
       br(),
       
@@ -127,10 +118,8 @@ shinyUI(fluidPage(
                           strong("As some parts require prior calculations, please use the analysis in order."),
 
                           br(),
-
                           br(),
                           br(),
-
                           hr(),
                           
                           fluidRow(
@@ -174,9 +163,12 @@ shinyUI(fluidPage(
           h4("Files available from data set"),
           helpText("The following list is the files available in the data set"),
           p(verbatimTextOutput("datasetFiles")),
+          
           br(),
+          
           p("To proceed the analysis, choose a file with one of the 
-            following formats: mzXML or mzML."),   ##### mzXML o mzML   <-----------------
+            following formats: mzXML or mzML."),   
+          
           br(),
           
           # choosing the MS file to be analyzed
@@ -212,11 +204,13 @@ shinyUI(fluidPage(
           sliderInput("sliderSpectraRT", label = strong("Choose Retention Time range"), min = 0, 
                       max = 60, value = c(30, 35)),     
           
-          #slider for M/Z ratio (m/z) y-axis
           p("Please, notice what the minimum and maximum m/z ratios for the raw data are and choose
             a range between those numbers:"), 
+          
           # print range M/Z ratio for raw data
           verbatimTextOutput("rangeMinMaxMZ"),
+          
+          #slider for M/Z ratio (m/z) y-axis
           sliderInput("sliderSpectraMZ", label = strong("Choose M/Z ratio range"), 
                       min=200, max=2500,              
                       value = c(521, 523)),     
@@ -224,7 +218,6 @@ shinyUI(fluidPage(
           # plots shown in 2on choice (Spectra Raw data)
           plotOutput("spectraRawData"),
           plotOutput("spectraRawData3D")
-          # plotOutput("spectra2RawData")
           ), 
 
 
@@ -285,8 +278,8 @@ shinyUI(fluidPage(
                            strong("This process can take more than 2 minutes. If you see this error:", 
                                   code("Error: missing value where TRUE/FALSE needed"), 
                                   "then the files are being parsed. When it's over, you will
-                                  see some information here below. You can follow the Progress
-                                  on the RStudio Console."),
+                                  see some information here below and go to the next section, 'Correction and Filtering'. 
+                                  You can follow the Progress on the RStudio Console."),
                            
                            verbatimTextOutput("id_info")
                            )
