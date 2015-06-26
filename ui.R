@@ -36,7 +36,7 @@ shinyUI(fluidPage(
 
       # explain the first step
      
-      p("The MS-app implements part of the Bioconductor proteomics workflow"),
+      p("If this is your first time using the App, read the help text in the main panel before starting."),
       
       
       h3("Step 1: choose a data set"),
@@ -309,7 +309,7 @@ shinyUI(fluidPage(
                                    the match between the experimental data and the database is a random event.If we expect a
                                    0.05 significance level (1/20), and we have 2000 peptides within the mass tolerance, that is P=1/(20*2000) and 
                                    the score threshold is 46 (-10log(P))."),
-                           tags$li(strong("Mass measurement error"), "- Computes error of the parent ion mass to charge measurement")
+                           tags$li(strong("Mass measurement error"), "- Computes error of the parent ion mass to charge measurement.")
                            ),
                          
                         
@@ -317,11 +317,11 @@ shinyUI(fluidPage(
                          p("The result is a matrix with with column names", em("fdr"), "and", em("n"), "Column", em("n"),
                           "contains the number of features (spectra, peptides or proteins/accessions) passing 
                           the filter. Column", em("fdr"), "is the false discovery rate (i.e. identification confidence) for 
-                          the corresponding features"), 
+                          the corresponding features."), 
                          p("Choose the desired thresholds. Below you will see the results:"),
                          verbatimTextOutput("filtering_msnid_out"),
                          verbatimTextOutput("correct_filter_out"),
-                         sliderInput("correction_msmsScore", label = h3("msms Score"), min = 0, 
+                         sliderInput("correction_msmsScore", label = h3("MS/MS Score"), min = 0, 
                                      max = 100, value = 5),
                          sliderInput("correction_ErrorPPM", label = h3("Parent Mass Error PPM"), min = 0, 
                                      max = 100, value = 10)
@@ -369,16 +369,20 @@ shinyUI(fluidPage(
                            tags$li(strong("Maximum"), "- Returns the maximum of the peaks"),
                            tags$li(strong("Sum"), "- Returns the sum of all intensities of the peaks.")
                            ),
-                         p("...explain..."),
-                         selectInput("quantif_method", label = h2("Select Peak Quantitation Method"), 
+                         p("The Bioconductor protocol uses method 'trapezoidation' and reporter 'iTRAQ4' with the PXD000001
+                           data set."),
+                         selectInput("quantif_method", label = h3("Select Peak Quantitation Method"), 
                                       choices = list("trapezoidation" = 1, 
                                                      "maximum" = 2, "sum" = 3), 
                                       selected = 1),
-                         selectInput("quantif_reporter", label = h2("Select Reporter Ion"), 
+                         selectInput("quantif_reporter", label = h3("Select Reporter Ion"), 
                                     choices = list("iTRAQ4" = 1, "iTRAQ5" = 2, 
                                                    "TMT6" = 3, "TMT7" = 4), 
                                     selected = 1),
                          
+                         helpText("Choose method and reporter and hit the button 'Calculate'. The following error may show up
+                                  while calculating:"),
+                         code("error in evaluating the argument 'object' in selecting a method for function"),
                          actionButton("quantif_button", label = "Calculate"),
                          verbatimTextOutput("calculateIfButton"),
                          
