@@ -236,8 +236,8 @@ shinyUI(fluidPage(
         # if user chooses analysis 3 (MS/MS database search)               
         conditionalPanel("input.radiobuttons=='3'",
           h2("MS/MS database search"),
-          p("We can search for MS/MS identifications in the raw data. For that we use the MSGF+ engine, parsing the
-             raw data against the fasta file of the organism, creating an identification file with mzID format."),
+          p("We can search for MS/MS identifications in the raw data. For that we create an identification file 
+            with mzID format using the MSGF+ engine, parsing the raw data against the fasta file of the organism."),
 
           br(),
 
@@ -264,7 +264,7 @@ shinyUI(fluidPage(
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
           
-          # AnADIR BOTON PARA imprimir lista files y una caja numerica
+
           actionButton("print_files_list", label = "Print files list"), 
           
           br(), 
@@ -330,11 +330,20 @@ shinyUI(fluidPage(
         # close input.radiobuttons=='4'            
         ),
 
+        # if user chooses the 5th choice "spectra raw data"
         conditionalPanel("input.radiobuttons=='5'",
                          h2("Spectra Raw Data with Identification"),
+                         p("With the identification data generated in", strong("MS/MS database search"), 
+                           "we can add this identifications to the raw data and extract and plot spectra and part
+                           of experiments."),
+                         p("For that, we need the identification file (mzID format), so please, if you didn't 
+                           already do it, go to", strong("MS/MS database search"), "and generate the identification file."),
+                         p("Also notice that while data is being read, the following error can appear:"),
+                         code("error in evaluating the argument 'x' in selecting a method for function 'plot'"),
                          plotOutput('msexpIdentPlot'),
+                         p("The total scans are:"),
                          verbatimTextOutput("msexp_length"),
-                         p("explain what is and use different numbers"),
+                         p("You can plot up to 3 scans. The 3 numbers should be different. "),
                          numericInput("msexpIdentPlot_num1", 
                                       label = "1st Number of scan", 
                                       value = "1"),
@@ -351,6 +360,15 @@ shinyUI(fluidPage(
         
         conditionalPanel("input.radiobuttons=='6'",
                          h2("Quantification"),
+                         p("There are a wide range of proteomics quantitation techniques. Here we implement
+                           a MS level 2 quantitation (MS2) where a method quantifies individual 'Spectrum' objects with MS2-level
+                           isobar tagging using iTRAQ and TMT. "),
+                         p("Also you can select a peak quantitation method. These methods are:"),
+                         tags$ol(
+                           tags$li(strong("Trapezoidation"), "- Returns the area under the peaks."),
+                           tags$li(strong("Maximum"), "- Returns the maximum of the peaks"),
+                           tags$li(strong("Sum"), "- Returns the sum of all intensities of the peaks.")
+                           ),
                          p("...explain..."),
                          selectInput("quantif_method", label = h2("Select Peak Quantitation Method"), 
                                       choices = list("trapezoidation" = 1, 
