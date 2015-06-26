@@ -279,7 +279,7 @@ shinyUI(fluidPage(
             conditionalPanel("input.num_fastafile_choice4", 
                            p("Now the raw data is going to be parsed against the fasta file to 
                              create an identification file. The search for default uses:"),
-                           code("instrument = 'HighRes'"), code("enzyme = 'Trypsin'"), code("protocol = 'iTRAQ'"),
+                           code("instrument = 'HighRes',"), code("enzyme = 'Trypsin',"), code("protocol = 'iTRAQ'"),
                            p("Another options are not implemented in this version."),
                            
                            br(),
@@ -301,17 +301,31 @@ shinyUI(fluidPage(
         # if user chooses analysis 4 (Correction and Filtering)               
         conditionalPanel("input.radiobuttons=='4'",
                          h2("Correction and Filtering"), 
-                         p("First, We need to perform a MS/MS database search. "),
-                         p("Returns a matrix with with column names", em("fdr"), "and", em("n"), "Column", em("n"),
+                         p("Once you have performed a MS/MS database search, we can correct and
+                           filter the results."),
+                         p("First we apply a correction of monoisotropic peaks. Then we define two filters:"),
+                         tags$ol(
+                           tags$li(strong("MS/MS Score threshold"), "- The MS/MS match score is the -10log of a probability, that
+                                   the match between the experimental data and the database is a random event.If we expect a
+                                   0.05 significance level (1/20), and we have 2000 peptides within the mass tolerance, that is P=1/(20*2000) and 
+                                   the score threshold is 46 (-10log(P))."),
+                           tags$li(strong("Mass measurement error"), "- Computes error of the parent ion mass to charge measurement")
+                           ),
+                         
+                        
+                         
+                         p("The result is a matrix with with column names", em("fdr"), "and", em("n"), "Column", em("n"),
                           "contains the number of features (spectra, peptides or proteins/accessions) passing 
                           the filter. Column", em("fdr"), "is the false discovery rate (i.e. identification confidence) for 
-                          the corresponding features"),                         
+                          the corresponding features"), 
+                         p("Choose the desired thresholds. Below you will see the results:"),
                          verbatimTextOutput("filtering_msnid_out"),
                          verbatimTextOutput("correct_filter_out"),
-                         sliderInput("correction_ErrorPPM", label = h3("absParentMassErrorPPM"), min = 0, 
-                                     max = 100, value = 10),
-                         sliderInput("correction_msmsScore", label = h3("msmsScore"), min = 0, 
-                                     max = 50, value = 5)
+                         sliderInput("correction_msmsScore", label = h3("msms Score"), min = 0, 
+                                     max = 100, value = 5),
+                         sliderInput("correction_ErrorPPM", label = h3("Parent Mass Error PPM"), min = 0, 
+                                     max = 100, value = 10)
+
                          
         # close input.radiobuttons=='4'            
         ),
