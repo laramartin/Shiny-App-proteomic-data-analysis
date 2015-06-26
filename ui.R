@@ -109,30 +109,28 @@ shinyUI(fluidPage(
                           p("The", strong("third step"), "is to select a type of analysis. The analysis implemented are:"),
                           
                           
-                          ### EXPLICAR BREVEMENTE QUE ES CADA UNO  <<<<<<------------------
                           tags$ol(
-                            tags$li(strong("Scan Peaks"), ": the number of scans will be printed, allowing you to choose
-                                    a number of scan to see its plot."), 
-                            tags$li(strong("Spectra Raw Data"), ": generates two plots. The first one is a heat map
+                            tags$li(strong("Scan Peaks"), "- plot a scan to see the peaks."), 
+                            tags$li(strong("Spectra Raw Data"), "- generates two plots. The first one is a heat map
                                     of the MS1 Spectra by m/z ratio and retention time chosen. The second plot is a
                                     3D of the first plot, adding the intensity as third axis."), 
-                            tags$li(strong("MS/MS database search"), ":"),
-                            tags$li(strong("Correction and Filtering"))
+                            tags$li(strong("MS/MS database search"), "- performs a MS/MS search creating an 
+                                    identification file (mzid)."),
+                            tags$li(strong("Correction and Filtering"), "- applies a correction and allows to
+                                    filter the MS/MS search results."),
+                            tags$li(strong("Spectra Raw Data with identifications"), "- plots the desire spectras with
+                                    the identifications added."),
+                            tags$li(strong("Quantification"), "- implements a MS level 2 quantitation choosing 
+                                    method and reporter.")
                             ),
+                          
+                          strong("As some parts require prior calculations, please use the analysis in order."),
 
                           br(),
-                          
-                          
 
-                          
-                          
-                          br(),
-                          br(),
-                          br(),
                           br(),
                           br(),
 
-                          
                           hr(),
                           
                           fluidRow(
@@ -369,6 +367,9 @@ shinyUI(fluidPage(
                            tags$li(strong("Maximum"), "- Returns the maximum of the peaks"),
                            tags$li(strong("Sum"), "- Returns the sum of all intensities of the peaks.")
                            ),
+                         
+                         p("Before starting the quantification, you must do the 'Spectra Raw Data with Identification' analysis
+                           to add the identification data to raw data. Then you are ready for the quantitation."),
                          p("The Bioconductor protocol uses method 'trapezoidation' and reporter 'iTRAQ4' with the PXD000001
                            data set."),
                          selectInput("quantif_method", label = h3("Select Peak Quantitation Method"), 
@@ -383,6 +384,12 @@ shinyUI(fluidPage(
                          helpText("Choose method and reporter and hit the button 'Calculate'. The following error may show up
                                   while calculating:"),
                          code("error in evaluating the argument 'object' in selecting a method for function"),
+                         
+                         div(p("Disclaimer: this part doesn't work, but decided to keep it as idea of how it would work"), 
+                             style= "color:red"),
+                         
+                         br(),
+                         
                          actionButton("quantif_button", label = "Calculate"),
                          verbatimTextOutput("calculateIfButton"),
                          
