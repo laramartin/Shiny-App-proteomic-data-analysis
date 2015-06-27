@@ -236,15 +236,17 @@ shinyServer(function(input, output) {
   })
   
   #################  analysis 5th choice - Spectra Raw Data with identification  ###############
+  # get path to mzID ID file
   id_file_path <- reactive({
     basename(mzID::files(create_mzID())$id)
   })
   
-  
+  #  read raw data and generate object type msexp
   msexp <- reactive({
     readMSData(mzf(), verbose = FALSE)
   })
   
+  # add ID data to msexp object
   msexpIdent <- reactive({ 
     addIdentificationData(msexp(), id_file_path())
   })
@@ -258,17 +260,19 @@ shinyServer(function(input, output) {
   # get method selected by user
   reporter_num <- reactive(input$quantif_reporter)
   
-  # 
+  # from list of methods, return which one is 
   select_method <- reactive({
     method_list <- c("trap", "max", "sum")
     method_list[as.numeric(method_num())]
   })
   
+  # from list of reporters, return which one is 
   select_reporter <- reactive({
     reporter_list <- c("iTRAQ4", "iTRAQ5", "TMT6", "TMT7")
     reporter_list[as.numeric(reporter_num())]
   })
   
+  # quantify with method and reporter selected
   msset <- reactive(
     quantify(msexpIdent(), 
              method = select_method(), 
@@ -319,6 +323,7 @@ shinyServer(function(input, output) {
 
   ########################  analysis 2nd choice - Spectra Raw Data  ########################
 
+  # show range min-max 
   output$rangeMinMaxMZ <- renderText({ 
     c(min(hd()$lowMZ[ms1()]), 
       max(hd()$highMZ[ms1()]))
@@ -331,6 +336,7 @@ shinyServer(function(input, output) {
     plot(mapSpectra(), aspect = 1, allTicks = FALSE)
   })
   
+  # a set of spectra of interest: MS1 spectra eluted - 3D plot
   output$spectraRawData3D <- renderPlot({
     plot3D(mapSpectra())
   })
@@ -338,14 +344,16 @@ shinyServer(function(input, output) {
   
   ########################  analysis  3rd choice - MS/MS database search  ########################
   
+  # print list of files of data set
   output$files_out <- renderPrint({
     buttonprintfiles()
   })
   
-  output$fasta_printnum <- renderPrint({
-    fasta_file_path()
-  })
+#   output$fasta_printnum <- renderPrint({
+#     fasta_file_path()
+#   })
   
+  # show info of identification file generated
   output$id_info <- renderPrint({
     show(msnid())
   })
@@ -354,10 +362,12 @@ shinyServer(function(input, output) {
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
+  # show which filter has been applied
   output$filtering_msnid_out <- renderPrint({
     filtering_msnid()
   })
   
+  # results from filtration
   output$correct_filter_out <- renderPrint({
     evaluate_msnid()
   })
@@ -365,6 +375,7 @@ shinyServer(function(input, output) {
   
   #################  analysis 5th choice - Spectra Raw Data with Identification  #################
   
+  # plot desired scans of msexp object with identifications
   output$msexpIdentPlot <- renderPlot({
     plot(msexpIdent()[c(input$msexpIdentPlot_num1, 
                         input$msexpIdentPlot_num2,
@@ -372,6 +383,7 @@ shinyServer(function(input, output) {
          full=TRUE)
   })
 
+  # print total number of scans available
   output$msexp_length <- renderText(
     length(msexp())
   )
@@ -379,6 +391,7 @@ shinyServer(function(input, output) {
   
   #################  analysis 6th choice - Quantification  #################
   
+  # print results of quantification
   output$msset_out <- renderPrint(
     if(input$quantif_button){
       exprs(msset())

@@ -297,7 +297,7 @@ shinyUI(fluidPage(
                          p("First we apply a correction of monoisotropic peaks. Then we define two filters:"),
                          tags$ol(
                            tags$li(strong("MS/MS Score threshold"), "- The MS/MS match score is the -10log of a probability, that
-                                   the match between the experimental data and the database is a random event.If we expect a
+                                   the match between the experimental data and the database is a random event. If we expect a
                                    0.05 significance level (1/20), and we have 2000 peptides within the mass tolerance, that is P=1/(20*2000) and 
                                    the score threshold is 46 (-10log(P))."),
                            tags$li(strong("Mass measurement error"), "- Computes error of the parent ion mass to charge measurement.")
@@ -321,7 +321,7 @@ shinyUI(fluidPage(
         # close input.radiobuttons=='4'            
         ),
 
-        # if user chooses the 5th choice "spectra raw data"
+        # if user chooses the 5th choice "spectra raw data with identification"
         conditionalPanel("input.radiobuttons=='5'",
                          h2("Spectra Raw Data with Identification"),
                          p("With the identification data generated in", strong("MS/MS database search"), 
@@ -331,10 +331,15 @@ shinyUI(fluidPage(
                            already do it, go to", strong("MS/MS database search"), "and generate the identification file."),
                          p("Also notice that while data is being read, the following error can appear:"),
                          code("error in evaluating the argument 'x' in selecting a method for function 'plot'"),
+                         
+                         # plot spectra with ids 
                          plotOutput('msexpIdentPlot'),
+                         
                          p("The total scans are:"),
+                         # print the total scans
                          verbatimTextOutput("msexp_length"),
                          p("You can plot up to 3 scans. The 3 numbers should be different. "),
+                         # numeric inputs - user chooses the scans to be plotted
                          numericInput("msexpIdentPlot_num1", 
                                       label = "1st Number of scan", 
                                       value = "1"),
