@@ -33,6 +33,7 @@ mzIDfromFasta <- function(fasta, rawdata){
   idres
 }
 
+# read the identification file and create an object
 msnid_from_fasta <- function(mymzID){
   msnid_object <- MSnID(".")
   msnid_object <- read_mzIDs(msnid_object,
@@ -171,6 +172,7 @@ shinyServer(function(input, output) {
     list_files()
   })
   
+  # get number of fasta file from list
   fastafilenum <- reactive({
     input$num_fastafile_choice4
     
@@ -214,6 +216,7 @@ shinyServer(function(input, output) {
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
+  # apply the standard correction as in Bioconductor workflow
   correction_msnid <- reactive({
     # correction 
     msnid_correct <- correct_peak_selection(msnid())
@@ -223,6 +226,7 @@ shinyServer(function(input, output) {
     
   })
   
+  # create a filter object with user's inputs
   filtering_msnid <- reactive({
     # filter
     filtObj <- MSnIDFilter(correction_msnid())
@@ -231,6 +235,7 @@ shinyServer(function(input, output) {
     filtObj
   })
   
+  # apply the filter to corrected data
   evaluate_msnid <- reactive({
     evaluate_filter(correction_msnid(), filtering_msnid())
   })
@@ -294,6 +299,7 @@ shinyServer(function(input, output) {
     dataset()
   })
   
+  # print taxonomic name of object
   output$datasetTax <- renderPrint({   
     tax_name()
   })
@@ -341,7 +347,6 @@ shinyServer(function(input, output) {
     plot3D(mapSpectra())
   })
   
-  
   ########################  analysis  3rd choice - MS/MS database search  ########################
   
   # print list of files of data set
@@ -349,16 +354,10 @@ shinyServer(function(input, output) {
     buttonprintfiles()
   })
   
-#   output$fasta_printnum <- renderPrint({
-#     fasta_file_path()
-#   })
-  
   # show info of identification file generated
   output$id_info <- renderPrint({
     show(msnid())
   })
-  
-  
   
   ########################  analysis 4th choice - Correction and Filtering  ########################
   
@@ -371,7 +370,6 @@ shinyServer(function(input, output) {
   output$correct_filter_out <- renderPrint({
     evaluate_msnid()
   })
-  
   
   #################  analysis 5th choice - Spectra Raw Data with Identification  #################
   
@@ -397,8 +395,6 @@ shinyServer(function(input, output) {
       exprs(msset())
     }
   )
-
-  
   
   ## end of shinyserver() function  
 })
