@@ -8,7 +8,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   ############  TITLE PANEL ##########
-      
+  
   fluidRow(
     column(2,
            img(src="lara_martin_tiny_logo.png", height="150px")
@@ -34,10 +34,10 @@ shinyUI(fluidPage(
      
       p("If this is your first time using the App, read the help text in the main panel before starting."),
       
-      
       h3("Step 1: choose a data set"),
       helpText("Write in the box the PX ID of the data set of interest. 
                You can use for example the PXD000001 data set."),
+      # box where user can write the ID
       textInput("datasetID", 
                 label = h5("Data set Identifiyer from ProteomeXchange"), 
                 value = ""),
@@ -80,8 +80,6 @@ shinyUI(fluidPage(
                           
                           br(),
                           
-                          
-                          
                           p("The", strong("first step"), "is to select the experiment data. For that, 
                             introduce on the sidebar the ID of one data set located in the ", 
                             a("ProteomeXchange database", 
@@ -99,7 +97,7 @@ shinyUI(fluidPage(
                           
                           p("The", strong("third step"), "is to select a type of analysis. The analysis implemented are:"),
                           
-                          
+                          # generate a numbered list
                           tags$ol(
                             tags$li(strong("Scan Peaks"), "- plot a scan to see the peaks."), 
                             tags$li(strong("Spectra Raw Data"), "- generates two plots. The first one is a heat map
@@ -187,9 +185,13 @@ shinyUI(fluidPage(
           p(verbatimTextOutput("msFileInfo")),
           p("Choose and write in the box the scan number you desire to plot and 
             it will be generated below."),
+          
+          # get number of scan that users wants to plot
           numericInput("numScan", 
                        label = "Scan number to plot", 
                        value = ""),
+          
+          # if user writes a number, show the plot
           conditionalPanel("input.numScan",
                            plotOutput('plotPeaks')
           )
@@ -216,14 +218,13 @@ shinyUI(fluidPage(
                       value = c(521, 523)),     
          
           # plots shown in 2on choice (Spectra Raw data)
+          # plot heat map
           plotOutput("spectraRawData"),
+          # 3D plot
           plotOutput("spectraRawData3D")
           ), 
 
-
-
-
-
+        
         # if user chooses analysis 3 (MS/MS database search)               
         conditionalPanel("input.radiobuttons=='3'",
           h2("MS/MS database search"),
@@ -254,19 +255,23 @@ shinyUI(fluidPage(
 
           h5(strong("-> Print the list of files available in the data set and choose the fasta file:")),
           
-          
-
+          # button that print the list of files when pressed
           actionButton("print_files_list", label = "Print files list"), 
           
           br(), 
           br(),
           
+          # show this panel if the button has been pressed
           conditionalPanel(
             condition= "input.print_files_list != '0'", 
             p(verbatimTextOutput("files_out")),
+            
+            # box where user writes the number of the fasta file
             numericInput("num_fastafile_choice4",
                          label = "Number of the fasta file on the data set",
                          value = ""),
+            
+            # show panel if user writes a number in the previous box
             conditionalPanel("input.num_fastafile_choice4", 
                            p("Now the raw data is going to be parsed against the fasta file to 
                              create an identification file. The search for default uses:"),
@@ -281,6 +286,7 @@ shinyUI(fluidPage(
                                   see some information here below and go to the next section, 'Correction and Filtering'. 
                                   You can follow the Progress on the RStudio Console."),
                            
+                           # show information of identification file generated
                            verbatimTextOutput("id_info")
                            )
             # close conditionalPanel "input.print_files_list != '0'"
@@ -295,6 +301,8 @@ shinyUI(fluidPage(
                          p("Once you have performed a MS/MS database search, we can correct and
                            filter the results."),
                          p("First we apply a correction of monoisotropic peaks. Then we define two filters:"),
+                         
+                         # generate a numbered list
                          tags$ol(
                            tags$li(strong("MS/MS Score threshold"), "- The MS/MS match score is the -10log of a probability, that
                                    the match between the experimental data and the database is a random event. If we expect a
@@ -302,22 +310,24 @@ shinyUI(fluidPage(
                                    the score threshold is 46 (-10log(P))."),
                            tags$li(strong("Mass measurement error"), "- Computes error of the parent ion mass to charge measurement.")
                            ),
-                         
-                        
-                         
+
                          p("The result is a matrix with with column names", em("fdr"), "and", em("n"), "Column", em("n"),
                           "contains the number of features (spectra, peptides or proteins/accessions) passing 
                           the filter. Column", em("fdr"), "is the false discovery rate (i.e. identification confidence) for 
                           the corresponding features."), 
                          p("Choose the desired thresholds. Below you will see the results:"),
+                         
+                         # print filter applied
                          verbatimTextOutput("filtering_msnid_out"),
+                         # print results of applying correction and filter
                          verbatimTextOutput("correct_filter_out"),
+                         
+                         # sliders to change the threshold of MS/MS Score and Parrent Mass Error
                          sliderInput("correction_msmsScore", label = h3("MS/MS Score"), min = 0, 
                                      max = 100, value = 5),
                          sliderInput("correction_ErrorPPM", label = h3("Parent Mass Error PPM"), min = 0, 
                                      max = 100, value = 10)
 
-                         
         # close input.radiobuttons=='4'            
         ),
 
@@ -353,13 +363,14 @@ shinyUI(fluidPage(
                        # close input.radiobuttons=='5'            
                        ),
 
-        
         conditionalPanel("input.radiobuttons=='6'",
                          h2("Quantification"),
                          p("There are a wide range of proteomics quantitation techniques. Here we implement
                            a MS level 2 quantitation (MS2) where a method quantifies individual 'Spectrum' objects with MS2-level
                            isobar tagging using iTRAQ and TMT. "),
                          p("Also you can select a peak quantitation method. These methods are:"),
+                         
+                         # generate a numbered list
                          tags$ol(
                            tags$li(strong("Trapezoidation"), "- Returns the area under the peaks."),
                            tags$li(strong("Maximum"), "- Returns the maximum of the peaks"),
@@ -370,10 +381,14 @@ shinyUI(fluidPage(
                            to add the identification data to raw data. Then you are ready for the quantitation."),
                          p("The Bioconductor protocol uses method 'trapezoidation' and reporter 'iTRAQ4' with the PXD000001
                            data set."),
+                         
+                         # select box to choose quantification method
                          selectInput("quantif_method", label = h3("Select Peak Quantitation Method"), 
                                       choices = list("trapezoidation" = 1, 
                                                      "maximum" = 2, "sum" = 3), 
                                       selected = 1),
+                         
+                         # select box to choose reporter 
                          selectInput("quantif_reporter", label = h3("Select Reporter Ion"), 
                                     choices = list("iTRAQ4" = 1, "iTRAQ5" = 2, 
                                                    "TMT6" = 3, "TMT7" = 4), 
@@ -388,16 +403,14 @@ shinyUI(fluidPage(
                          
                          br(),
                          
+                         # action button that starts the quantification calculation when pressed
                          actionButton("quantif_button", label = "Calculate"),
-                         verbatimTextOutput("calculateIfButton"),
                          
+                         # print output of quantification analysis
                          verbatimTextOutput("msset_out")
                          
                          # close input.radiobuttons=='6'
                          )
-
-
-
 
       # close conditional conditionalPanel("input.number_file"
       )
