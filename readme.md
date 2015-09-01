@@ -2,7 +2,7 @@
 
 1. Libraries installation
 
-  1.1 Open the setup.R script with RStudio and run. The libraries needed will be installed. 
+  1.1 Open the setup.R script with RStudio and run it. The needed libraries will be installed. 
 
   1.2 If there are any problems during the installation, open RStudio as an admin. Right-click on the RStudio icon and select "Run as administrator". 
 
@@ -26,4 +26,4 @@
 
 3. Open the server.R and ui.R scripts with RStudio and run the App clicking on "Run App"
 
-About the author: created by Lara Martin for Master thesis 2015
+About the author: created by Lara Martin for Master thesis in 2015
